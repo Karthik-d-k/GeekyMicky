@@ -23,3 +23,8 @@
 
 ## BlogPosts
 - [David Hannaford's UKMARSbot pages](https://www.davidhannaford.com/ukmars/)
+
+## Papers
+- [An Efficient Algorithm for Robot Maze-Solving](https://ieeexplore.ieee.org/document/5591159)
+- [Variable priorities in maze-solving algorithms for robot's movement](https://ieeexplore.ieee.org/document/1300267)
+- [Maze Solving Algorithms for Micro Mouse](https://ieeexplore.ieee.org/document/4725791)

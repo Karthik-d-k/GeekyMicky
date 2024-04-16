@@ -6,6 +6,7 @@
 
 int main() {
     int out1 = test_queue();
+    printf("\n");
     int out2 = test_floodfill();
 
     return 0;

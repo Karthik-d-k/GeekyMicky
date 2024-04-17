@@ -4,25 +4,25 @@
 #include "maze.h"
 #include "queue.h"
 
-uint8_t COST[MAZE_WIDTH][MAZE_HEIGHT];
-WallInfo WALLS[MAZE_WIDTH][MAZE_HEIGHT];
+uint8_t COST[MAZE_SIZE][MAZE_SIZE];
+WallInfo WALLS[MAZE_SIZE][MAZE_SIZE];
 
 void initialise_walls() {
-    for (int x = 0; x < MAZE_WIDTH; x++) {
-        for (int y = 0; y < MAZE_HEIGHT; y++) {
-            WALLS[x][y].north = UNKNOWN;
-            WALLS[x][y].east = UNKNOWN;
-            WALLS[x][y].south = UNKNOWN;
-            WALLS[x][y].west = UNKNOWN;
+    for (int r = 0; r < MAZE_SIZE; r++) {
+        for (int c = 0; c < MAZE_SIZE; c++) {
+            WALLS[r][c].north = UNKNOWN;
+            WALLS[r][c].east = UNKNOWN;
+            WALLS[r][c].south = UNKNOWN;
+            WALLS[r][c].west = UNKNOWN;
         }
     }
-    for (int x = 0; x < MAZE_WIDTH; x++) {
-        WALLS[x][0].south = WALL;
-        WALLS[x][MAZE_HEIGHT - 1].north = WALL;
+    for (int r = 0; r < MAZE_SIZE; r++) {
+        WALLS[r][0].south = WALL;
+        WALLS[r][MAZE_SIZE - 1].north = WALL;
     }
-    for (int y = 0; y < MAZE_HEIGHT; y++) {
-        WALLS[0][y].west = WALL;
-        WALLS[MAZE_WIDTH - 1][y].east = WALL;
+    for (int c = 0; c < MAZE_SIZE; c++) {
+        WALLS[0][c].west = WALL;
+        WALLS[MAZE_SIZE - 1][c].east = WALL;
     }
     // set_wall_state(START, EAST, WALL);
     WALLS[0][0].east = WALL;
@@ -32,7 +32,7 @@ void initialise_walls() {
 
 bool is_cell_accessible(CELL cell, int direction) {
     bool result = false;
-    WallInfo walls = WALLS[cell.x][cell.y];
+    WallInfo walls = WALLS[cell.r][cell.c];
     switch (direction) {
     case 0:
         result = (walls.north & MASK_OPEN) == EXIT;
@@ -57,35 +57,35 @@ bool is_cell_accessible(CELL cell, int direction) {
 CELL neighbour_cell(CELL cell, int direction) {
     switch (direction) {
     case 0: { // North
-        uint8_t new_y = cell.y + 1;
-        if (new_y >= MAZE_HEIGHT) {
+        uint8_t new_y = cell.c + 1;
+        if (new_y >= MAZE_SIZE) {
             return cell;
         }
-        CELL neighbour_cell = {cell.x, new_y};
+        CELL neighbour_cell = {cell.r, new_y};
         return neighbour_cell;
     }
     case 1: { // East
-        uint8_t new_x = cell.x + 1;
-        if (new_x >= MAZE_WIDTH) {
+        uint8_t new_x = cell.r + 1;
+        if (new_x >= MAZE_SIZE) {
             return cell;
         }
-        CELL neighbour_cell = {new_x, cell.y};
+        CELL neighbour_cell = {new_x, cell.c};
         return neighbour_cell;
     }
     case 2: { // South
-        uint8_t new_y = cell.y - 1;
+        uint8_t new_y = cell.c - 1;
         if (new_y < 0) {
             return cell;
         }
-        CELL neighbour_cell = {cell.x, new_y};
+        CELL neighbour_cell = {cell.r, new_y};
         return neighbour_cell;
     }
     case 3: { // West
-        uint8_t new_x = cell.x - 1;
+        uint8_t new_x = cell.r - 1;
         if (new_x < 0) {
             return cell;
         }
-        CELL neighbour_cell = {new_x, cell.y};
+        CELL neighbour_cell = {new_x, cell.c};
         return neighbour_cell;
     }
     default:
@@ -96,16 +96,16 @@ CELL neighbour_cell(CELL cell, int direction) {
 
 void floodfill(const CELL target) {
     // 1. Set all cells cost to "blank state" (255)
-    for (int x = 0; x < MAZE_WIDTH; x++) {
-        for (int y = 0; y < MAZE_HEIGHT; y++) {
-            COST[x][y] = (uint8_t)MAX_COST;
+    for (int r = 0; r < MAZE_SIZE; r++) {
+        for (int c = 0; c < MAZE_SIZE; c++) {
+            COST[r][c] = (uint8_t)MAX_COST;
         }
     }
 
     // 2. Set target cell cost value to 0 and add target cell to queue
     QUEUE queue;
     queue_init(&queue);
-    COST[target.x][target.y] = 0;
+    COST[target.r][target.c] = 0;
     queue_push_rear(&queue, target);
 
     // 3. While queue is not empty
@@ -113,14 +113,14 @@ void floodfill(const CELL target) {
         // 3a. Take first pushed cell from queue
         CELL current_cell = queue_pop_front(&queue);
         // 3b. Calculate new cell cost value based on current cell
-        uint16_t newCost = COST[current_cell.x][current_cell.y] + 1;
+        uint16_t newCost = COST[current_cell.r][current_cell.c] + 1;
 
         // 3c. Set all "blank" and "accessible(no wall)" cells cost to new cost
         for (int direction = 0; direction <= 3; direction++) {
             if (is_cell_accessible(current_cell, direction)) {
                 CELL nextCell = neighbour_cell(current_cell, direction);
-                if (COST[nextCell.x][nextCell.y] > newCost) {
-                    COST[nextCell.x][nextCell.y] = newCost;
+                if (COST[nextCell.r][nextCell.c] > newCost) {
+                    COST[nextCell.r][nextCell.c] = newCost;
                     // 3d. Add cells we just processed to queue
                     queue_push_rear(&queue, nextCell);
                 }

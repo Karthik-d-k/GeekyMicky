@@ -4,14 +4,13 @@
 #include <stdint.h>
 
 // MAZE CONSTANTS
-#define MAZE_WIDTH 16
-#define MAZE_HEIGHT 16
-#define MAZE_CELL_COUNT (MAZE_WIDTH * MAZE_HEIGHT)
+#define MAZE_SIZE 16
+#define MAZE_CELL_COUNT (MAZE_SIZE * MAZE_SIZE)
 #define MAX_COST (MAZE_CELL_COUNT - 1)
 
 typedef struct {
-    uint8_t x;
-    uint8_t y;
+    uint8_t r;
+    uint8_t c;
 } CELL;
 
 typedef enum { NORTH,
@@ -21,6 +20,6 @@ typedef enum { NORTH,
                HEADING_COUNT,
                BLOCKED = 99 } DIRECTION;
 
-void print_maze(uint8_t cost[MAZE_WIDTH][MAZE_HEIGHT]);
+void print_maze(uint8_t cost[MAZE_SIZE][MAZE_SIZE]);
 
 #endif

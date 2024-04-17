@@ -41,7 +41,7 @@ int test_queue() {
     queue_push_rear(&queue, value3);
     for (int i = 0; i < 3; i++) {
         CELL pop_value = queue_pop_front(&queue);
-        printf("Read [%d, %d]\n", pop_value.x, pop_value.y);
+        printf("Read [%d, %d]\n", pop_value.r, pop_value.c);
     }
 
     return 0;

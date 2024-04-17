@@ -1,6 +1,8 @@
 #ifndef FLOODFILL_H
 #define FLOODFILL_H
 
+#include <stdbool.h>
+
 #include "maze.h"
 
 #define START \

@@ -14,12 +14,12 @@ typedef struct {
     uint8_t y;
 } CELL;
 
-enum DIRECTION { NORTH,
-                 EAST,
-                 SOUTH,
-                 WEST,
-                 HEADING_COUNT,
-                 BLOCKED = 99 };
+typedef enum { NORTH,
+               EAST,
+               SOUTH,
+               WEST,
+               HEADING_COUNT,
+               BLOCKED = 99 } DIRECTION;
 
 void print_maze(uint8_t cost[MAZE_WIDTH][MAZE_HEIGHT]);
 

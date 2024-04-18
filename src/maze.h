@@ -10,6 +10,8 @@
 
 #define START \
     CELL { 0, 0 }
+#define END \
+    CELL { 7, 7 }
 
 typedef struct {
     uint8_t r;
@@ -24,10 +26,10 @@ typedef enum { NORTH,
                BLOCKED = 99 } DIRECTION;
 
 typedef enum {
-    EXIT = 0b00,    // a wall that has been seen and confirmed absent
-    WALL = 0b01,    // a wall that has been seen and confirmed present
-    UNKNOWN = 0b10, // a wall that has not yet been seen
-    VIRTUAL = 0b11, // a wall that has not yet been seen
+    WALL_ABSENT = 0b00,  // a wall that has been seen and confirmed absent
+    WALL_PRESENT = 0b01, // a wall that has been seen and confirmed present
+    WALL_UNSEEN = 0b10,  // a wall that has not yet been seen
+    WALL_VIRTUAL = 0b11, // a wall that does not exist in the physical maze, used for special cases
 } WallState;
 
 typedef struct {
@@ -38,8 +40,8 @@ typedef struct {
 } WallInfo;
 
 typedef enum {
-    MASK_OPEN = 0x01,   // open maze for search
-    MASK_CLOSED = 0x03, // closed maze for fast run
+    MASK_TREAT_UNSEEN_AS_ABSENT = 0x01,  // treat unseen walls as absent during search
+    MASK_TREAT_UNSEEN_AS_PRESENT = 0x03, // treat unseen walls as present during speed run
 } MazeMask;
 
 void initialise_walls();

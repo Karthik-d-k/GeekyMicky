@@ -10,24 +10,24 @@ WallInfo WALLS[MAZE_SIZE][MAZE_SIZE];
 void initialise_walls() {
     for (int r = 0; r < MAZE_SIZE; r++) {
         for (int c = 0; c < MAZE_SIZE; c++) {
-            WALLS[r][c].north = UNKNOWN;
-            WALLS[r][c].east = UNKNOWN;
-            WALLS[r][c].south = UNKNOWN;
-            WALLS[r][c].west = UNKNOWN;
+            WALLS[r][c].north = WALL_UNSEEN;
+            WALLS[r][c].east = WALL_UNSEEN;
+            WALLS[r][c].south = WALL_UNSEEN;
+            WALLS[r][c].west = WALL_UNSEEN;
         }
     }
     for (int r = 0; r < MAZE_SIZE; r++) {
-        WALLS[r][0].south = WALL;
-        WALLS[r][MAZE_SIZE - 1].north = WALL;
+        WALLS[r][0].south = WALL_PRESENT;
+        WALLS[r][MAZE_SIZE - 1].north = WALL_PRESENT;
     }
     for (int c = 0; c < MAZE_SIZE; c++) {
-        WALLS[0][c].west = WALL;
-        WALLS[MAZE_SIZE - 1][c].east = WALL;
+        WALLS[0][c].west = WALL_PRESENT;
+        WALLS[MAZE_SIZE - 1][c].east = WALL_PRESENT;
     }
-    // set_wall_state(START, EAST, WALL);
-    WALLS[0][0].east = WALL;
-    // set_wall_state(START, NORTH, EXIT);
-    WALLS[0][0].north = EXIT;
+    // set_wall_state(START, EAST, WALL_PRESENT);
+    WALLS[0][0].east = WALL_PRESENT;
+    // set_wall_state(START, NORTH, WALL_ABSENT);
+    WALLS[0][0].north = WALL_ABSENT;
 }
 
 bool is_cell_accessible(CELL cell, int direction) {
@@ -35,16 +35,16 @@ bool is_cell_accessible(CELL cell, int direction) {
     WallInfo walls = WALLS[cell.r][cell.c];
     switch (direction) {
     case 0:
-        result = (walls.north & MASK_OPEN) == EXIT;
+        result = (walls.north & MASK_TREAT_UNSEEN_AS_ABSENT) == WALL_ABSENT;
         break;
     case 1:
-        result = (walls.east & MASK_OPEN) == EXIT;
+        result = (walls.east & MASK_TREAT_UNSEEN_AS_ABSENT) == WALL_ABSENT;
         break;
     case 2:
-        result = (walls.south & MASK_OPEN) == EXIT;
+        result = (walls.south & MASK_TREAT_UNSEEN_AS_ABSENT) == WALL_ABSENT;
         break;
     case 3:
-        result = (walls.west & MASK_OPEN) == EXIT;
+        result = (walls.west & MASK_TREAT_UNSEEN_AS_ABSENT) == WALL_ABSENT;
         break;
     default:
         result = false;

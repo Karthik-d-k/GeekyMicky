@@ -44,7 +44,7 @@ typedef enum {
     MASK_TREAT_UNSEEN_AS_PRESENT = 0x03, // treat unseen walls as present during speed run
 } MazeMask;
 
-void initialise_walls();
+void init_walls();
 
 void set_wall_state(CELL loc, DIRECTION heading, WallState state);
 
@@ -52,6 +52,10 @@ bool is_cell_accessible(CELL cell, int direction);
 
 CELL neighbour_cell(CELL cell, int direction);
 
+void set_mask(const MazeMask mask);
+
 void print_maze(uint8_t cost[MAZE_SIZE][MAZE_SIZE]);
+
+void init_maze();
 
 #endif

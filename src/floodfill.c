@@ -4,7 +4,7 @@
 #include "maze.h"
 #include "queue.h"
 
-extern uint8_t COST[MAZE_SIZE][MAZE_SIZE];
+uint8_t COST[MAZE_SIZE][MAZE_SIZE];
 extern WallInfo WALLS[MAZE_SIZE][MAZE_SIZE];
 
 void floodfill(const CELL target) {
@@ -45,7 +45,6 @@ void floodfill(const CELL target) {
 // -------------------TEST / USAGE ------------------------- //
 int test_floodfill() {
     CELL goal = {7, 7};
-    initialise_walls();
     floodfill(goal);
     print_maze(COST);
 

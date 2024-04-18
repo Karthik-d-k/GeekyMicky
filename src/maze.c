@@ -4,10 +4,10 @@
 
 #include "maze.h"
 
-uint8_t COST[MAZE_SIZE][MAZE_SIZE];
 WallInfo WALLS[MAZE_SIZE][MAZE_SIZE];
+MazeMask MAZE_MASK;
 
-void initialise_walls() {
+void init_walls() {
     for (int r = 0; r < MAZE_SIZE; r++) {
         for (int c = 0; c < MAZE_SIZE; c++) {
             WALLS[r][c].north = WALL_UNSEEN;
@@ -35,16 +35,16 @@ bool is_cell_accessible(CELL cell, int direction) {
     WallInfo walls = WALLS[cell.r][cell.c];
     switch (direction) {
     case 0:
-        result = (walls.north & MASK_TREAT_UNSEEN_AS_ABSENT) == WALL_ABSENT;
+        result = (walls.north & MAZE_MASK) == WALL_ABSENT;
         break;
     case 1:
-        result = (walls.east & MASK_TREAT_UNSEEN_AS_ABSENT) == WALL_ABSENT;
+        result = (walls.east & MAZE_MASK) == WALL_ABSENT;
         break;
     case 2:
-        result = (walls.south & MASK_TREAT_UNSEEN_AS_ABSENT) == WALL_ABSENT;
+        result = (walls.south & MAZE_MASK) == WALL_ABSENT;
         break;
     case 3:
-        result = (walls.west & MASK_TREAT_UNSEEN_AS_ABSENT) == WALL_ABSENT;
+        result = (walls.west & MAZE_MASK) == WALL_ABSENT;
         break;
     default:
         result = false;
@@ -94,6 +94,10 @@ CELL neighbour_cell(CELL cell, int direction) {
     }
 }
 
+void set_mask(const MazeMask mask) {
+    MAZE_MASK = mask;
+}
+
 void print_maze(uint8_t cost[MAZE_SIZE][MAZE_SIZE]) {
     // Print the top border of the maze
     for (int col = MAZE_SIZE - 1; col >= 0; col--) {
@@ -116,4 +120,9 @@ void print_maze(uint8_t cost[MAZE_SIZE][MAZE_SIZE]) {
         printf("+-------");
     }
     printf("+\n");
+}
+
+void init_maze() {
+    init_walls();
+    set_mask(MASK_TREAT_UNSEEN_AS_ABSENT);
 }

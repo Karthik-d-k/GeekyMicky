@@ -18,12 +18,20 @@ typedef struct {
     uint8_t c;
 } CELL;
 
+// Absolute direction represents cordinal compass direction
 typedef enum { NORTH,
                EAST,
                SOUTH,
                WEST,
-               HEADING_COUNT,
-               BLOCKED = 99 } DIRECTION;
+               COUNT,
+               BLOCKED = 99 } ABSOLUTE_DIRECTION;
+
+// Relative direction represents robot's orientation
+typedef enum { AHEAD,
+               RIGHT,
+               BACK,
+               LEFT,
+               COUNT } RELATIVE_DIRECTION;
 
 typedef enum {
     WALL_ABSENT = 0b00,  // a wall that has been seen and confirmed absent
@@ -46,7 +54,7 @@ typedef enum {
 
 void init_walls();
 
-void set_wall_state(CELL loc, DIRECTION heading, WallState state);
+void set_wall_state(CELL loc, ABSOLUTE_DIRECTION heading, WallState state);
 
 bool is_cell_accessible(CELL cell, int direction);
 

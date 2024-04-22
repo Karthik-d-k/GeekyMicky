@@ -8,6 +8,7 @@ WallInfo WALLS[MAZE_SIZE][MAZE_SIZE];
 MazeMask MAZE_MASK;
 CELL CURRENT_CELL;
 ABSOLUTE_DIRECTION CURRENT_ABSOLUTE_DIRECTION;
+extern uint8_t COST[MAZE_SIZE][MAZE_SIZE];
 
 void init_walls() {
     for (int r = 0; r < MAZE_SIZE; r++) {
@@ -33,20 +34,20 @@ void init_walls() {
     WALLS[0][0].south = WALL_PRESENT;
 }
 
-bool is_cell_accessible(CELL cell, int direction) {
+bool is_cell_accessible(CELL cell, ABSOLUTE_DIRECTION direction) {
     bool result = false;
     WallInfo walls = WALLS[cell.r][cell.c];
     switch (direction) {
-    case 0:
+    case NORTH:
         result = (walls.north & MAZE_MASK) == WALL_ABSENT;
         break;
-    case 1:
+    case EAST:
         result = (walls.east & MAZE_MASK) == WALL_ABSENT;
         break;
-    case 2:
+    case SOUTH:
         result = (walls.south & MAZE_MASK) == WALL_ABSENT;
         break;
-    case 3:
+    case WEST:
         result = (walls.west & MAZE_MASK) == WALL_ABSENT;
         break;
     default:
@@ -97,11 +98,20 @@ CELL neighbour_cell(CELL cell, ABSOLUTE_DIRECTION direction) {
     }
 }
 
+uint8_t neighbour_cell_cost(const CELL cell, const ABSOLUTE_DIRECTION direction) {
+    if (!is_cell_accessible(cell, direction)) {
+        return MAX_COST;
+    }
+    CELL next_cell = neighbour_cell(cell, direction);
+
+    return COST[next_cell.r][next_cell.c];
+}
+
 void set_mask(const MazeMask mask) {
     MAZE_MASK = mask;
 }
 
-void set_walls(bool front_wall, bool right_wall, bool left_wall) {
+void set_walls(WallState front_wall, WallState right_wall, WallState left_wall) {
     CELL north_cell = neighbour_cell(CURRENT_CELL, NORTH);
     CELL south_cell = neighbour_cell(CURRENT_CELL, EAST);
     CELL east_cell = neighbour_cell(CURRENT_CELL, SOUTH);
@@ -172,7 +182,7 @@ void set_walls(bool front_wall, bool right_wall, bool left_wall) {
     }
 }
 
-void update_walls(bool front_wall, bool right_wall, bool left_wall) {
+void update_walls(WallState front_wall, WallState right_wall, WallState left_wall) {
     // Do not update walls info while running (not searching)
     // This check may not be required i guess !!
     if (MAZE_MASK == MASK_TREAT_UNSEEN_AS_PRESENT) {

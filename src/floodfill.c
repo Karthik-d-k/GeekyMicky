@@ -30,8 +30,8 @@ void floodfill(const CELL target) {
 
         // 3c. Set all "blank" and "accessible(no wall)" cells cost to new cost
         for (int direction = 0; direction <= 3; direction++) {
-            if (is_cell_accessible(current_cell, direction)) {
-                CELL nextCell = neighbour_cell(current_cell, direction);
+            if (is_cell_accessible(current_cell, (ABSOLUTE_DIRECTION)direction)) {
+                CELL nextCell = neighbour_cell(current_cell, (ABSOLUTE_DIRECTION)direction);
                 if (COST[nextCell.r][nextCell.c] > newCost) {
                     COST[nextCell.r][nextCell.c] = newCost;
                     // 3d. Add cells we just processed to queue

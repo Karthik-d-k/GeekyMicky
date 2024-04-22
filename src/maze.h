@@ -23,7 +23,7 @@ typedef enum { NORTH,
                EAST,
                SOUTH,
                WEST,
-               COUNT,
+               ABS_DIR_COUNT,
                BLOCKED = 99 } ABSOLUTE_DIRECTION;
 
 // Relative direction represents robot's orientation
@@ -31,7 +31,7 @@ typedef enum { AHEAD,
                RIGHT,
                BACK,
                LEFT,
-               COUNT } RELATIVE_DIRECTION;
+               REL_DIR_COUNT } RELATIVE_DIRECTION;
 
 typedef enum {
     WALL_ABSENT = 0b00,  // a wall that has been seen and confirmed absent
@@ -54,15 +54,17 @@ typedef enum {
 
 void init_walls();
 
-bool is_cell_accessible(CELL cell, int direction);
+bool is_cell_accessible(CELL cell, ABSOLUTE_DIRECTION direction);
 
 CELL neighbour_cell(CELL cell, ABSOLUTE_DIRECTION direction);
 
+uint8_t neighbour_cell_cost(const CELL cell, const ABSOLUTE_DIRECTION direction);
+
 void set_mask(const MazeMask mask);
 
-void set_walls(bool front_wall, bool right_wall, bool left_wall);
+void set_walls(WallState front_wall, WallState right_wall, WallState left_wall);
 
-void update_walls(bool front_wall, bool right_wall, bool left_wall);
+void update_walls(WallState front_wall, WallState right_wall, WallState left_wall);
 
 void print_maze(uint8_t cost[MAZE_SIZE][MAZE_SIZE]);
 

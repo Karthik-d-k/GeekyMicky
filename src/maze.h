@@ -54,13 +54,15 @@ typedef enum {
 
 void init_walls();
 
-void set_wall_state(CELL loc, ABSOLUTE_DIRECTION heading, WallState state);
-
 bool is_cell_accessible(CELL cell, int direction);
 
 CELL neighbour_cell(CELL cell, int direction);
 
 void set_mask(const MazeMask mask);
+
+void set_walls(bool front_wall, bool right_wall, bool left_wall);
+
+void update_walls(bool front_wall, bool right_wall, bool left_wall);
 
 void print_maze(uint8_t cost[MAZE_SIZE][MAZE_SIZE]);
 

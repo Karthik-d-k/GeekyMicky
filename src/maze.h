@@ -56,7 +56,7 @@ void init_walls();
 
 bool is_cell_accessible(CELL cell, int direction);
 
-CELL neighbour_cell(CELL cell, int direction);
+CELL neighbour_cell(CELL cell, ABSOLUTE_DIRECTION direction);
 
 void set_mask(const MazeMask mask);
 

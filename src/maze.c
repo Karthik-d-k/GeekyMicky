@@ -98,13 +98,49 @@ CELL neighbour_cell(CELL cell, ABSOLUTE_DIRECTION direction) {
     }
 }
 
-uint8_t neighbour_cell_cost(const CELL cell, const ABSOLUTE_DIRECTION direction) {
+uint8_t cost_neighbour_cell(const CELL cell, const ABSOLUTE_DIRECTION direction) {
     if (!is_cell_accessible(cell, direction)) {
         return MAX_COST;
     }
     CELL next_cell = neighbour_cell(cell, direction);
 
     return COST[next_cell.r][next_cell.c];
+}
+
+ABSOLUTE_DIRECTION smallest_neighbour_cell(const CELL cell, const ABSOLUTE_DIRECTION start_direction) {
+    ABSOLUTE_DIRECTION next_direction = start_direction;
+    ABSOLUTE_DIRECTION best_direction = BLOCKED;
+    uint8_t best_cost = COST[cell.r][cell.c];
+    uint8_t cost;
+
+    cost = cost_neighbour_cell(cell, next_direction);
+    if (cost < best_cost) {
+        best_cost = cost;
+        best_direction = next_direction;
+    };
+    next_direction = right_from(start_direction);
+    cost = cost_neighbour_cell(cell, next_direction);
+    if (cost < best_cost) {
+        best_cost = cost;
+        best_direction = next_direction;
+    };
+    next_direction = left_from(start_direction);
+    cost = cost_neighbour_cell(cell, next_direction);
+    if (cost < best_cost) {
+        best_cost = cost;
+        best_direction = next_direction;
+    };
+    next_direction = behind_from(start_direction);
+    cost = cost_neighbour_cell(cell, next_direction);
+    if (cost < best_cost) {
+        best_cost = cost;
+        best_direction = next_direction;
+    };
+    if (best_cost == MAX_COST) {
+        best_direction = BLOCKED;
+    }
+
+    return best_direction;
 }
 
 void set_mask(const MazeMask mask) {

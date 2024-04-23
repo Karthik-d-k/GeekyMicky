@@ -58,7 +58,7 @@ bool is_cell_accessible(CELL cell, ABSOLUTE_DIRECTION direction);
 
 CELL neighbour_cell(CELL cell, ABSOLUTE_DIRECTION direction);
 
-uint8_t neighbour_cell_cost(const CELL cell, const ABSOLUTE_DIRECTION direction);
+uint8_t cost_neighbour_cell(const CELL cell, const ABSOLUTE_DIRECTION direction);
 
 void set_mask(const MazeMask mask);
 

@@ -7,12 +7,12 @@ C_FILES=$(wildcard ./src/*.c)
 H_FILES=$(wildcard ./src/*.h)
 OUT_FILE=geekymicky
 
-## build         : Compilke and build executable
+## build        : Build executable
 .PHONY : build
 build:
 	$(COMPILER) $(C_FILES) $(H_FILES) -std=$(VERSION) $(FLAGS) -o $(OUT_FILE)
 
-## run           : Run executable
+## run          : Run executable
 .PHONY : run
 run:
 	./$(OUT_FILE)

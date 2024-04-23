@@ -11,9 +11,9 @@ void init() {
 int main() {
     init();
 
-    int out1 = test_queue();
+    test_queue();
     printf("\n");
-    int out2 = test_floodfill();
+    test_floodfill();
 
     return 0;
 }

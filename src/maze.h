@@ -1,6 +1,7 @@
 #ifndef MAZE_H
 #define MAZE_H
 
+#include <stdbool.h>
 #include <stdint.h>
 
 // MAZE CONSTANTS
@@ -9,9 +10,9 @@
 #define MAX_COST (MAZE_CELL_COUNT - 1)
 
 #define START \
-    CELL { 0, 0 }
+    { 0, 0 }
 #define END \
-    CELL { 7, 7 }
+    { 7, 7 }
 
 typedef struct {
     uint8_t r;
@@ -26,22 +27,6 @@ typedef enum { NORTH,
                ABS_DIR_COUNT,
                BLOCKED = 99 } ABSOLUTE_DIRECTION;
 
-inline ABSOLUTE_DIRECTION right_from(const ABSOLUTE_DIRECTION heading) {
-    return (ABSOLUTE_DIRECTION)((heading + 1) % ABS_DIR_COUNT);
-}
-
-inline ABSOLUTE_DIRECTION left_from(const ABSOLUTE_DIRECTION heading) {
-    return (ABSOLUTE_DIRECTION)((heading + ABS_DIR_COUNT - 1) % ABS_DIR_COUNT);
-}
-
-inline ABSOLUTE_DIRECTION ahead_from(const ABSOLUTE_DIRECTION heading) {
-    return heading;
-}
-
-inline ABSOLUTE_DIRECTION behind_from(const ABSOLUTE_DIRECTION heading) {
-    return (ABSOLUTE_DIRECTION)((heading + 2) % ABS_DIR_COUNT);
-}
-
 // Relative direction represents robot's orientation
 typedef enum { AHEAD,
                RIGHT,
@@ -50,10 +35,10 @@ typedef enum { AHEAD,
                REL_DIR_COUNT } RELATIVE_DIRECTION;
 
 typedef enum {
-    WALL_ABSENT = 0b00,  // a wall that has been seen and confirmed absent
-    WALL_PRESENT = 0b01, // a wall that has been seen and confirmed present
-    WALL_UNSEEN = 0b10,  // a wall that has not yet been seen
-    WALL_VIRTUAL = 0b11, // a wall that does not exist in the physical maze, used for special cases
+    WALL_ABSENT = 0x00,  // a wall that has been seen and confirmed absent
+    WALL_PRESENT = 0x01, // a wall that has been seen and confirmed present
+    WALL_UNSEEN = 0x02,  // a wall that has not yet been seen
+    WALL_VIRTUAL = 0x03, // a wall that does not exist in the physical maze, used for special cases
 } WallState;
 
 typedef struct {
@@ -68,6 +53,14 @@ typedef enum {
     MASK_TREAT_UNSEEN_AS_PRESENT = 0x03, // treat unseen walls as present during speed run
 } MazeMask;
 
+ABSOLUTE_DIRECTION right_from(const ABSOLUTE_DIRECTION heading);
+
+ABSOLUTE_DIRECTION left_from(const ABSOLUTE_DIRECTION heading);
+
+ABSOLUTE_DIRECTION ahead_from(const ABSOLUTE_DIRECTION heading);
+
+ABSOLUTE_DIRECTION behind_from(const ABSOLUTE_DIRECTION heading);
+
 void init_walls();
 
 bool is_cell_accessible(CELL cell, ABSOLUTE_DIRECTION direction);
@@ -75,6 +68,8 @@ bool is_cell_accessible(CELL cell, ABSOLUTE_DIRECTION direction);
 CELL neighbour_cell(CELL cell, ABSOLUTE_DIRECTION direction);
 
 uint8_t cost_neighbour_cell(const CELL cell, const ABSOLUTE_DIRECTION direction);
+
+ABSOLUTE_DIRECTION smallest_neighbour_cell(const CELL cell, const ABSOLUTE_DIRECTION start_direction);
 
 void set_mask(const MazeMask mask);
 

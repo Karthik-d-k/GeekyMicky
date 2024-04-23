@@ -10,6 +10,21 @@ CELL CURRENT_CELL;
 ABSOLUTE_DIRECTION CURRENT_ABSOLUTE_DIRECTION;
 extern uint8_t COST[MAZE_SIZE][MAZE_SIZE];
 
+inline ABSOLUTE_DIRECTION right_from(const ABSOLUTE_DIRECTION heading) {
+    return (ABSOLUTE_DIRECTION)((heading + 1) % ABS_DIR_COUNT);
+}
+
+inline ABSOLUTE_DIRECTION left_from(const ABSOLUTE_DIRECTION heading) {
+    return (ABSOLUTE_DIRECTION)((heading + ABS_DIR_COUNT - 1) % ABS_DIR_COUNT);
+}
+
+inline ABSOLUTE_DIRECTION ahead_from(const ABSOLUTE_DIRECTION heading) {
+    return heading;
+}
+
+inline ABSOLUTE_DIRECTION behind_from(const ABSOLUTE_DIRECTION heading) {
+    return (ABSOLUTE_DIRECTION)((heading + 2) % ABS_DIR_COUNT);
+}
 void init_walls() {
     for (int r = 0; r < MAZE_SIZE; r++) {
         for (int c = 0; c < MAZE_SIZE; c++) {
@@ -61,7 +76,7 @@ bool is_cell_accessible(CELL cell, ABSOLUTE_DIRECTION direction) {
 CELL neighbour_cell(CELL cell, ABSOLUTE_DIRECTION direction) {
     switch (direction) {
     case NORTH: {
-        uint8_t new_y = cell.c + 1;
+        int16_t new_y = cell.c + 1;
         if (new_y >= MAZE_SIZE) {
             return cell;
         }
@@ -69,7 +84,7 @@ CELL neighbour_cell(CELL cell, ABSOLUTE_DIRECTION direction) {
         return neighbour_cell;
     }
     case EAST: {
-        uint8_t new_x = cell.r + 1;
+        int16_t new_x = cell.r + 1;
         if (new_x >= MAZE_SIZE) {
             return cell;
         }
@@ -77,7 +92,7 @@ CELL neighbour_cell(CELL cell, ABSOLUTE_DIRECTION direction) {
         return neighbour_cell;
     }
     case SOUTH: {
-        uint8_t new_y = cell.c - 1;
+        int16_t new_y = cell.c - 1;
         if (new_y < 0) {
             return cell;
         }
@@ -85,7 +100,7 @@ CELL neighbour_cell(CELL cell, ABSOLUTE_DIRECTION direction) {
         return neighbour_cell;
     }
     case WEST: {
-        uint8_t new_x = cell.r - 1;
+        int16_t new_x = cell.r - 1;
         if (new_x < 0) {
             return cell;
         }

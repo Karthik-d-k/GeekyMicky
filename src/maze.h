@@ -26,6 +26,22 @@ typedef enum { NORTH,
                ABS_DIR_COUNT,
                BLOCKED = 99 } ABSOLUTE_DIRECTION;
 
+inline ABSOLUTE_DIRECTION right_from(const ABSOLUTE_DIRECTION heading) {
+    return (ABSOLUTE_DIRECTION)((heading + 1) % ABS_DIR_COUNT);
+}
+
+inline ABSOLUTE_DIRECTION left_from(const ABSOLUTE_DIRECTION heading) {
+    return (ABSOLUTE_DIRECTION)((heading + ABS_DIR_COUNT - 1) % ABS_DIR_COUNT);
+}
+
+inline ABSOLUTE_DIRECTION ahead_from(const ABSOLUTE_DIRECTION heading) {
+    return heading;
+}
+
+inline ABSOLUTE_DIRECTION behind_from(const ABSOLUTE_DIRECTION heading) {
+    return (ABSOLUTE_DIRECTION)((heading + 2) % ABS_DIR_COUNT);
+}
+
 // Relative direction represents robot's orientation
 typedef enum { AHEAD,
                RIGHT,

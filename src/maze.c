@@ -35,12 +35,12 @@ void init_walls() {
         }
     }
     for (int r = 0; r < MAZE_SIZE; r++) {
-        WALLS[r][0].south = WALL_PRESENT;
-        WALLS[r][MAZE_SIZE - 1].north = WALL_PRESENT;
+        WALLS[r][0].west = WALL_PRESENT;
+        WALLS[r][MAZE_SIZE - 1].east = WALL_PRESENT;
     }
     for (int c = 0; c < MAZE_SIZE; c++) {
-        WALLS[0][c].west = WALL_PRESENT;
-        WALLS[MAZE_SIZE - 1][c].east = WALL_PRESENT;
+        WALLS[0][c].south = WALL_PRESENT;
+        WALLS[MAZE_SIZE - 1][c].north = WALL_PRESENT;
     }
 
     WALLS[0][0].north = WALL_ABSENT;
@@ -76,14 +76,6 @@ bool is_cell_accessible(CELL cell, ABSOLUTE_DIRECTION direction) {
 CELL neighbour_cell(CELL cell, ABSOLUTE_DIRECTION direction) {
     switch (direction) {
     case NORTH: {
-        int16_t new_y = cell.c + 1;
-        if (new_y >= MAZE_SIZE) {
-            return cell;
-        }
-        CELL neighbour_cell = {cell.r, new_y};
-        return neighbour_cell;
-    }
-    case EAST: {
         int16_t new_x = cell.r + 1;
         if (new_x >= MAZE_SIZE) {
             return cell;
@@ -91,20 +83,28 @@ CELL neighbour_cell(CELL cell, ABSOLUTE_DIRECTION direction) {
         CELL neighbour_cell = {new_x, cell.c};
         return neighbour_cell;
     }
-    case SOUTH: {
-        int16_t new_y = cell.c - 1;
-        if (new_y < 0) {
+    case EAST: {
+        int16_t new_y = cell.c + 1;
+        if (new_y >= MAZE_SIZE) {
             return cell;
         }
         CELL neighbour_cell = {cell.r, new_y};
         return neighbour_cell;
     }
-    case WEST: {
+    case SOUTH: {
         int16_t new_x = cell.r - 1;
         if (new_x < 0) {
             return cell;
         }
         CELL neighbour_cell = {new_x, cell.c};
+        return neighbour_cell;
+    }
+    case WEST: {
+        int16_t new_y = cell.c - 1;
+        if (new_y < 0) {
+            return cell;
+        }
+        CELL neighbour_cell = {cell.r, new_y};
         return neighbour_cell;
     }
     default:

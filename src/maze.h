@@ -73,7 +73,7 @@ ABSOLUTE_DIRECTION smallest_neighbour_cell(const CELL cell, const ABSOLUTE_DIREC
 
 void set_mask(const MazeMask mask);
 
-void set_walls(WallState front_wall, WallState right_wall, WallState left_wall);
+WallState get_wall_state(WallState current_state, WallState new_state);
 
 void update_walls(WallState front_wall, WallState right_wall, WallState left_wall);
 

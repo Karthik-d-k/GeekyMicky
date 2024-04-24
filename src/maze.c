@@ -5,25 +5,25 @@
 #include "maze.h"
 
 WallInfo WALLS[MAZE_SIZE][MAZE_SIZE];
-MazeMask MAZE_MASK;
-CELL CURRENT_CELL;
-ABSOLUTE_DIRECTION CURRENT_ABSOLUTE_DIRECTION;
+MazeMask MAZE_MASK = MASK_TREAT_UNSEEN_AS_ABSENT;
+CELL CURRENT_CELL = {0, 0};
+ABSOLUTE_DIRECTION CURRENT_ABSOLUTE_DIRECTION = NORTH;
 extern uint8_t COST[MAZE_SIZE][MAZE_SIZE];
 
-inline ABSOLUTE_DIRECTION right_from(const ABSOLUTE_DIRECTION heading) {
-    return (ABSOLUTE_DIRECTION)((heading + 1) % ABS_DIR_COUNT);
+inline ABSOLUTE_DIRECTION right_from(const ABSOLUTE_DIRECTION direction) {
+    return (ABSOLUTE_DIRECTION)((direction + 1) % ABS_DIR_COUNT);
 }
 
-inline ABSOLUTE_DIRECTION left_from(const ABSOLUTE_DIRECTION heading) {
-    return (ABSOLUTE_DIRECTION)((heading + ABS_DIR_COUNT - 1) % ABS_DIR_COUNT);
+inline ABSOLUTE_DIRECTION left_from(const ABSOLUTE_DIRECTION direction) {
+    return (ABSOLUTE_DIRECTION)((direction + ABS_DIR_COUNT - 1) % ABS_DIR_COUNT);
 }
 
-inline ABSOLUTE_DIRECTION ahead_from(const ABSOLUTE_DIRECTION heading) {
-    return heading;
+inline ABSOLUTE_DIRECTION ahead_from(const ABSOLUTE_DIRECTION direction) {
+    return direction;
 }
 
-inline ABSOLUTE_DIRECTION behind_from(const ABSOLUTE_DIRECTION heading) {
-    return (ABSOLUTE_DIRECTION)((heading + 2) % ABS_DIR_COUNT);
+inline ABSOLUTE_DIRECTION behind_from(const ABSOLUTE_DIRECTION direction) {
+    return (ABSOLUTE_DIRECTION)((direction + 2) % ABS_DIR_COUNT);
 }
 void init_walls() {
     for (int r = 0; r < MAZE_SIZE; r++) {
@@ -139,13 +139,13 @@ ABSOLUTE_DIRECTION smallest_neighbour_cell(const CELL cell, const ABSOLUTE_DIREC
         best_cost = cost;
         best_direction = next_direction;
     };
-    next_direction = left_from(start_direction);
+    next_direction = behind_from(start_direction);
     cost = cost_neighbour_cell(cell, next_direction);
     if (cost < best_cost) {
         best_cost = cost;
         best_direction = next_direction;
     };
-    next_direction = behind_from(start_direction);
+    next_direction = left_from(start_direction);
     cost = cost_neighbour_cell(cell, next_direction);
     if (cost < best_cost) {
         best_cost = cost;
@@ -162,112 +162,63 @@ void set_mask(const MazeMask mask) {
     MAZE_MASK = mask;
 }
 
-void set_walls(WallState front_wall, WallState right_wall, WallState left_wall) {
+WallState get_wall_state(WallState current_state, WallState new_state) {
+    if ((current_state & WALL_UNSEEN) == WALL_UNSEEN) { // Check if the wall is unseen before updating
+        return new_state;
+    }
+    return current_state; // Return current state if not unseen
+}
+void update_walls(WallState front_wall, WallState right_wall, WallState left_wall) {
     CELL north_cell = neighbour_cell(CURRENT_CELL, NORTH);
-    CELL south_cell = neighbour_cell(CURRENT_CELL, EAST);
-    CELL east_cell = neighbour_cell(CURRENT_CELL, SOUTH);
+    CELL east_cell = neighbour_cell(CURRENT_CELL, EAST);
+    CELL south_cell = neighbour_cell(CURRENT_CELL, SOUTH);
     CELL west_cell = neighbour_cell(CURRENT_CELL, WEST);
 
     switch (CURRENT_ABSOLUTE_DIRECTION) {
-    // set current cell front walls along with  it's neighbour cell back wall
-    case NORTH: {
-        WALLS[CURRENT_CELL.r][CURRENT_CELL.c]
-            .north = front_wall;
-        WALLS[north_cell.r][north_cell.c].south = front_wall;
-
-        WALLS[CURRENT_CELL.r][CURRENT_CELL.c]
-            .east = front_wall;
-        WALLS[east_cell.r][east_cell.c].west = right_wall;
-
-        WALLS[CURRENT_CELL.r][CURRENT_CELL.c]
-            .west = front_wall;
-        WALLS[west_cell.r][west_cell.c].east = left_wall;
-
-        break;
-    }
-    case EAST:
-        WALLS[CURRENT_CELL.r][CURRENT_CELL.c]
-            .east = front_wall;
-        WALLS[east_cell.r][east_cell.c].west = front_wall;
-
-        WALLS[CURRENT_CELL.r][CURRENT_CELL.c]
-            .south = front_wall;
-        WALLS[south_cell.r][south_cell.c].north = right_wall;
-
-        WALLS[CURRENT_CELL.r][CURRENT_CELL.c]
-            .north = front_wall;
-        WALLS[north_cell.r][north_cell.c].south = left_wall;
-
-        break;
-    case SOUTH:
-        WALLS[CURRENT_CELL.r][CURRENT_CELL.c]
-            .south = front_wall;
-        WALLS[south_cell.r][south_cell.c].north = front_wall;
-
-        WALLS[CURRENT_CELL.r][CURRENT_CELL.c]
-            .west = front_wall;
-        WALLS[west_cell.r][west_cell.c].east = right_wall;
-
-        WALLS[CURRENT_CELL.r][CURRENT_CELL.c]
-            .east = front_wall;
-        WALLS[east_cell.r][east_cell.c].west = left_wall;
-
-        break;
-    case WEST:
-        WALLS[CURRENT_CELL.r][CURRENT_CELL.c]
-            .west = front_wall;
-        WALLS[west_cell.r][west_cell.c].east = front_wall;
-
-        WALLS[CURRENT_CELL.r][CURRENT_CELL.c]
-            .north = front_wall;
-        WALLS[north_cell.r][north_cell.c].south = right_wall;
-
-        WALLS[CURRENT_CELL.r][CURRENT_CELL.c]
-            .south = front_wall;
-        WALLS[south_cell.r][south_cell.c].north = left_wall;
-
-        break;
-    default:
-        // ignore any other Directions (blocked)
-        break;
-    }
-}
-
-void update_walls(WallState front_wall, WallState right_wall, WallState left_wall) {
-    // Do not update walls info while running (not searching)
-    // This check may not be required i guess !!
-    if (MAZE_MASK == MASK_TREAT_UNSEEN_AS_PRESENT) {
-        return;
-    }
-
-    switch (CURRENT_ABSOLUTE_DIRECTION) {
     case NORTH:
-        if ((WALLS[CURRENT_CELL.r][CURRENT_CELL.c].north & WALL_UNSEEN) != WALL_UNSEEN) {
-            return;
-        }
+        WALLS[CURRENT_CELL.r][CURRENT_CELL.c].north = get_wall_state(WALLS[CURRENT_CELL.r][CURRENT_CELL.c].north, front_wall);
+        WALLS[north_cell.r][north_cell.c].south = get_wall_state(WALLS[north_cell.r][north_cell.c].south, front_wall);
+
+        WALLS[CURRENT_CELL.r][CURRENT_CELL.c].east = get_wall_state(WALLS[CURRENT_CELL.r][CURRENT_CELL.c].east, right_wall);
+        WALLS[east_cell.r][east_cell.c].west = get_wall_state(WALLS[east_cell.r][east_cell.c].west, right_wall);
+
+        WALLS[CURRENT_CELL.r][CURRENT_CELL.c].west = get_wall_state(WALLS[CURRENT_CELL.r][CURRENT_CELL.c].west, left_wall);
+        WALLS[west_cell.r][west_cell.c].east = get_wall_state(WALLS[west_cell.r][west_cell.c].east, left_wall);
         break;
     case EAST:
-        if ((WALLS[CURRENT_CELL.r][CURRENT_CELL.c].east & WALL_UNSEEN) != WALL_UNSEEN) {
-            return;
-        }
-        break;
-    case WEST:
-        if ((WALLS[CURRENT_CELL.r][CURRENT_CELL.c].west & WALL_UNSEEN) != WALL_UNSEEN) {
-            return;
-        }
+        WALLS[CURRENT_CELL.r][CURRENT_CELL.c].east = get_wall_state(WALLS[CURRENT_CELL.r][CURRENT_CELL.c].east, front_wall);
+        WALLS[east_cell.r][east_cell.c].west = get_wall_state(WALLS[east_cell.r][east_cell.c].west, front_wall);
+
+        WALLS[CURRENT_CELL.r][CURRENT_CELL.c].south = get_wall_state(WALLS[CURRENT_CELL.r][CURRENT_CELL.c].south, right_wall);
+        WALLS[south_cell.r][south_cell.c].north = get_wall_state(WALLS[south_cell.r][south_cell.c].north, right_wall);
+
+        WALLS[CURRENT_CELL.r][CURRENT_CELL.c].north = get_wall_state(WALLS[CURRENT_CELL.r][CURRENT_CELL.c].north, left_wall);
+        WALLS[north_cell.r][north_cell.c].south = get_wall_state(WALLS[north_cell.r][north_cell.c].south, left_wall);
         break;
     case SOUTH:
-        if ((WALLS[CURRENT_CELL.r][CURRENT_CELL.c].south & WALL_UNSEEN) != WALL_UNSEEN) {
-            return;
-        }
+        WALLS[CURRENT_CELL.r][CURRENT_CELL.c].south = get_wall_state(WALLS[CURRENT_CELL.r][CURRENT_CELL.c].south, front_wall);
+        WALLS[south_cell.r][south_cell.c].north = get_wall_state(WALLS[south_cell.r][south_cell.c].north, front_wall);
+
+        WALLS[CURRENT_CELL.r][CURRENT_CELL.c].west = get_wall_state(WALLS[CURRENT_CELL.r][CURRENT_CELL.c].west, right_wall);
+        WALLS[west_cell.r][west_cell.c].east = get_wall_state(WALLS[west_cell.r][west_cell.c].east, right_wall);
+
+        WALLS[CURRENT_CELL.r][CURRENT_CELL.c].east = get_wall_state(WALLS[CURRENT_CELL.r][CURRENT_CELL.c].east, left_wall);
+        WALLS[east_cell.r][east_cell.c].west = get_wall_state(WALLS[east_cell.r][east_cell.c].west, left_wall);
+        break;
+    case WEST:
+        WALLS[CURRENT_CELL.r][CURRENT_CELL.c].west = get_wall_state(WALLS[CURRENT_CELL.r][CURRENT_CELL.c].west, front_wall);
+        WALLS[west_cell.r][west_cell.c].east = get_wall_state(WALLS[west_cell.r][west_cell.c].east, front_wall);
+
+        WALLS[CURRENT_CELL.r][CURRENT_CELL.c].north = get_wall_state(WALLS[CURRENT_CELL.r][CURRENT_CELL.c].north, right_wall);
+        WALLS[north_cell.r][north_cell.c].south = get_wall_state(WALLS[north_cell.r][north_cell.c].south, right_wall);
+
+        WALLS[CURRENT_CELL.r][CURRENT_CELL.c].south = get_wall_state(WALLS[CURRENT_CELL.r][CURRENT_CELL.c].south, left_wall);
+        WALLS[south_cell.r][south_cell.c].north = get_wall_state(WALLS[south_cell.r][south_cell.c].north, left_wall);
         break;
     default:
-        // ignore any other Directions (blocked)
+        // Ignore any other directions
         break;
     }
-
-    // set walls only if it is not seen earlier
-    set_walls(front_wall, right_wall, left_wall);
 }
 
 void print_maze(uint8_t cost[MAZE_SIZE][MAZE_SIZE]) {

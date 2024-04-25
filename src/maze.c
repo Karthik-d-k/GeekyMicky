@@ -2,6 +2,7 @@
 #include <stdint.h>
 #include <stdio.h>
 
+#include "floodfill.h"
 #include "maze.h"
 
 WallInfo WALLS[MAZE_SIZE][MAZE_SIZE];
@@ -25,6 +26,7 @@ inline ABSOLUTE_DIRECTION ahead_from(const ABSOLUTE_DIRECTION direction) {
 inline ABSOLUTE_DIRECTION behind_from(const ABSOLUTE_DIRECTION direction) {
     return (ABSOLUTE_DIRECTION)((direction + 2) % ABS_DIR_COUNT);
 }
+
 void init_walls() {
     for (int r = 0; r < MAZE_SIZE; r++) {
         for (int c = 0; c < MAZE_SIZE; c++) {
@@ -238,6 +240,105 @@ void update_walls(WallState front_wall, WallState right_wall, WallState left_wal
     default:
         // Ignore any other directions
         break;
+    }
+}
+
+void turn_to_face(ABSOLUTE_DIRECTION new_direction) {
+    RELATIVE_DIRECTION direction_change = (new_direction + ABS_DIR_COUNT - CURRENT_ABSOLUTE_DIRECTION) % ABS_DIR_COUNT;
+
+    switch (direction_change) {
+    case AHEAD:
+        break;
+    case RIGHT:
+        // API_turnRight();
+        break;
+    case BACK:
+        // API_turnRight();
+        // API_turnRight();
+        break;
+    case LEFT:
+        // API_turnLeft();
+        break;
+    default:
+        // Ignore any other directions
+        break;
+    }
+    CURRENT_ABSOLUTE_DIRECTION = new_direction;
+}
+
+void seach_to(CELL target) {
+    while ((CURRENT_CELL.r != target.r) || (CURRENT_CELL.c != target.c)) {
+        WallState front_wall = WALL_ABSENT; // API_wallFront() ? WALL_PRESENT : WALL_ABSENT;
+        WallState right_wall = WALL_ABSENT; // API_wallRight() ? WALL_PRESENT : WALL_ABSENT;
+        WallState left_wall = WALL_ABSENT;  // API_wallLeft() ? WALL_PRESENT : WALL_ABSENT;
+
+        update_walls(front_wall, right_wall, left_wall);
+        floodfill(target);
+
+        ABSOLUTE_DIRECTION new_direction = smallest_neighbour_cell(CURRENT_CELL, CURRENT_ABSOLUTE_DIRECTION);
+        RELATIVE_DIRECTION direction_change = (new_direction - CURRENT_ABSOLUTE_DIRECTION) & 0x3;
+
+        switch (direction_change) {
+        case AHEAD:
+            // API_moveForward();
+            break;
+        case RIGHT:
+            // API_turnRight();
+            // API_moveForward();
+            break;
+        case BACK:
+            // API_turnRight();
+            // API_turnRight();
+            // API_moveForward();
+            break;
+        case LEFT:
+            // API_turnLeft();
+            // API_moveForward();
+            break;
+        default:
+            // Ignore any other directions
+            break;
+        }
+
+        // update to new direction and new cell
+        CURRENT_ABSOLUTE_DIRECTION = new_direction;
+        CURRENT_CELL = neighbour_cell(CURRENT_CELL, CURRENT_ABSOLUTE_DIRECTION);
+    }
+}
+
+void run_to(CELL target) {
+    set_mask(MASK_TREAT_UNSEEN_AS_PRESENT);
+    floodfill(target);
+
+    while ((CURRENT_CELL.r != target.r) || (CURRENT_CELL.c != target.c)) {
+        ABSOLUTE_DIRECTION new_direction = smallest_neighbour_cell(CURRENT_CELL, CURRENT_ABSOLUTE_DIRECTION);
+        RELATIVE_DIRECTION direction_change = (new_direction - CURRENT_ABSOLUTE_DIRECTION) & 0x3;
+
+        switch (direction_change) {
+        case AHEAD:
+            // API_moveForward();
+            break;
+        case RIGHT:
+            // API_turnRight();
+            // API_moveForward();
+            break;
+        case BACK:
+            // API_turnRight();
+            // API_turnRight();
+            // API_moveForward();
+            break;
+        case LEFT:
+            // API_turnLeft();
+            // API_moveForward();
+            break;
+        default:
+            // Ignore any other directions
+            break;
+        }
+
+        // update to new direction and new cell
+        CURRENT_ABSOLUTE_DIRECTION = new_direction;
+        CURRENT_CELL = neighbour_cell(CURRENT_CELL, CURRENT_ABSOLUTE_DIRECTION);
     }
 }
 

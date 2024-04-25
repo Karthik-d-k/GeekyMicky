@@ -12,7 +12,7 @@
 #define START \
     { 0, 0 }
 #define END \
-    { 7, 7 }
+    { 15, 15 }
 
 typedef struct {
     uint8_t r;
@@ -76,6 +76,12 @@ void set_mask(const MazeMask mask);
 WallState get_wall_state(WallState current_state, WallState new_state);
 
 void update_walls(WallState front_wall, WallState right_wall, WallState left_wall);
+
+void turn_to_face(ABSOLUTE_DIRECTION new_direction);
+
+void seach_to(CELL target);
+
+void run_to(CELL target);
 
 void print_maze(uint8_t cost[MAZE_SIZE][MAZE_SIZE]);
 

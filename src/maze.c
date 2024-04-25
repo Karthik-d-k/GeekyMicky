@@ -132,24 +132,29 @@ ABSOLUTE_DIRECTION smallest_neighbour_cell(const CELL cell, const ABSOLUTE_DIREC
         best_cost = cost;
         best_direction = next_direction;
     };
+
     next_direction = right_from(start_direction);
     cost = cost_neighbour_cell(cell, next_direction);
+
     if (cost < best_cost) {
         best_cost = cost;
         best_direction = next_direction;
     };
+
     next_direction = behind_from(start_direction);
     cost = cost_neighbour_cell(cell, next_direction);
     if (cost < best_cost) {
         best_cost = cost;
         best_direction = next_direction;
     };
+
     next_direction = left_from(start_direction);
     cost = cost_neighbour_cell(cell, next_direction);
     if (cost < best_cost) {
         best_cost = cost;
         best_direction = next_direction;
     };
+
     if (best_cost == MAX_COST) {
         best_direction = BLOCKED;
     }
@@ -174,46 +179,62 @@ void update_walls(WallState front_wall, WallState right_wall, WallState left_wal
     CELL west_cell = neighbour_cell(CURRENT_CELL, WEST);
 
     switch (CURRENT_ABSOLUTE_DIRECTION) {
-    case NORTH:
-        WALLS[CURRENT_CELL.r][CURRENT_CELL.c].north = get_wall_state(WALLS[CURRENT_CELL.r][CURRENT_CELL.c].north, front_wall);
-        WALLS[north_cell.r][north_cell.c].south = get_wall_state(WALLS[north_cell.r][north_cell.c].south, front_wall);
+    case NORTH: {
+        WallState ns = get_wall_state(WALLS[north_cell.r][north_cell.c].south, front_wall);
+        WALLS[CURRENT_CELL.r][CURRENT_CELL.c].north = ns;
+        WALLS[north_cell.r][north_cell.c].south = ns;
 
-        WALLS[CURRENT_CELL.r][CURRENT_CELL.c].east = get_wall_state(WALLS[CURRENT_CELL.r][CURRENT_CELL.c].east, right_wall);
-        WALLS[east_cell.r][east_cell.c].west = get_wall_state(WALLS[east_cell.r][east_cell.c].west, right_wall);
+        WallState ew = get_wall_state(WALLS[east_cell.r][east_cell.c].west, right_wall);
+        WALLS[CURRENT_CELL.r][CURRENT_CELL.c].east = ew;
+        WALLS[east_cell.r][east_cell.c].west = ew;
 
-        WALLS[CURRENT_CELL.r][CURRENT_CELL.c].west = get_wall_state(WALLS[CURRENT_CELL.r][CURRENT_CELL.c].west, left_wall);
-        WALLS[west_cell.r][west_cell.c].east = get_wall_state(WALLS[west_cell.r][west_cell.c].east, left_wall);
+        WallState we = get_wall_state(WALLS[west_cell.r][west_cell.c].east, left_wall);
+        WALLS[CURRENT_CELL.r][CURRENT_CELL.c].west = we;
+        WALLS[west_cell.r][west_cell.c].east = we;
         break;
-    case EAST:
-        WALLS[CURRENT_CELL.r][CURRENT_CELL.c].east = get_wall_state(WALLS[CURRENT_CELL.r][CURRENT_CELL.c].east, front_wall);
-        WALLS[east_cell.r][east_cell.c].west = get_wall_state(WALLS[east_cell.r][east_cell.c].west, front_wall);
+    }
+    case EAST: {
+        WallState ew = get_wall_state(WALLS[east_cell.r][east_cell.c].west, front_wall);
+        WALLS[CURRENT_CELL.r][CURRENT_CELL.c].east = ew;
+        WALLS[east_cell.r][east_cell.c].west = ew;
 
-        WALLS[CURRENT_CELL.r][CURRENT_CELL.c].south = get_wall_state(WALLS[CURRENT_CELL.r][CURRENT_CELL.c].south, right_wall);
-        WALLS[south_cell.r][south_cell.c].north = get_wall_state(WALLS[south_cell.r][south_cell.c].north, right_wall);
+        WallState sn = get_wall_state(WALLS[south_cell.r][south_cell.c].north, right_wall);
+        WALLS[CURRENT_CELL.r][CURRENT_CELL.c].south = sn;
+        WALLS[south_cell.r][south_cell.c].north = sn;
 
-        WALLS[CURRENT_CELL.r][CURRENT_CELL.c].north = get_wall_state(WALLS[CURRENT_CELL.r][CURRENT_CELL.c].north, left_wall);
-        WALLS[north_cell.r][north_cell.c].south = get_wall_state(WALLS[north_cell.r][north_cell.c].south, left_wall);
+        WallState ns = get_wall_state(WALLS[north_cell.r][north_cell.c].south, left_wall);
+        WALLS[CURRENT_CELL.r][CURRENT_CELL.c].north = ns;
+        WALLS[north_cell.r][north_cell.c].south = ns;
         break;
-    case SOUTH:
-        WALLS[CURRENT_CELL.r][CURRENT_CELL.c].south = get_wall_state(WALLS[CURRENT_CELL.r][CURRENT_CELL.c].south, front_wall);
-        WALLS[south_cell.r][south_cell.c].north = get_wall_state(WALLS[south_cell.r][south_cell.c].north, front_wall);
+    }
+    case SOUTH: {
+        WallState sn = get_wall_state(WALLS[south_cell.r][south_cell.c].north, front_wall);
+        WALLS[CURRENT_CELL.r][CURRENT_CELL.c].south = sn;
+        WALLS[south_cell.r][south_cell.c].north = sn;
 
-        WALLS[CURRENT_CELL.r][CURRENT_CELL.c].west = get_wall_state(WALLS[CURRENT_CELL.r][CURRENT_CELL.c].west, right_wall);
-        WALLS[west_cell.r][west_cell.c].east = get_wall_state(WALLS[west_cell.r][west_cell.c].east, right_wall);
+        WallState we = get_wall_state(WALLS[west_cell.r][west_cell.c].east, right_wall);
+        WALLS[CURRENT_CELL.r][CURRENT_CELL.c].west = we;
+        WALLS[west_cell.r][west_cell.c].east = we;
 
-        WALLS[CURRENT_CELL.r][CURRENT_CELL.c].east = get_wall_state(WALLS[CURRENT_CELL.r][CURRENT_CELL.c].east, left_wall);
-        WALLS[east_cell.r][east_cell.c].west = get_wall_state(WALLS[east_cell.r][east_cell.c].west, left_wall);
+        WallState ew = get_wall_state(WALLS[east_cell.r][east_cell.c].west, left_wall);
+        WALLS[CURRENT_CELL.r][CURRENT_CELL.c].east = ew;
+        WALLS[east_cell.r][east_cell.c].west = ew;
         break;
-    case WEST:
-        WALLS[CURRENT_CELL.r][CURRENT_CELL.c].west = get_wall_state(WALLS[CURRENT_CELL.r][CURRENT_CELL.c].west, front_wall);
-        WALLS[west_cell.r][west_cell.c].east = get_wall_state(WALLS[west_cell.r][west_cell.c].east, front_wall);
+    }
+    case WEST: {
+        WallState we = get_wall_state(WALLS[west_cell.r][west_cell.c].east, front_wall);
+        WALLS[CURRENT_CELL.r][CURRENT_CELL.c].west = we;
+        WALLS[west_cell.r][west_cell.c].east = we;
 
-        WALLS[CURRENT_CELL.r][CURRENT_CELL.c].north = get_wall_state(WALLS[CURRENT_CELL.r][CURRENT_CELL.c].north, right_wall);
-        WALLS[north_cell.r][north_cell.c].south = get_wall_state(WALLS[north_cell.r][north_cell.c].south, right_wall);
+        WallState ns = get_wall_state(WALLS[north_cell.r][north_cell.c].south, right_wall);
+        WALLS[CURRENT_CELL.r][CURRENT_CELL.c].north = ns;
+        WALLS[north_cell.r][north_cell.c].south = ns;
 
-        WALLS[CURRENT_CELL.r][CURRENT_CELL.c].south = get_wall_state(WALLS[CURRENT_CELL.r][CURRENT_CELL.c].south, left_wall);
-        WALLS[south_cell.r][south_cell.c].north = get_wall_state(WALLS[south_cell.r][south_cell.c].north, left_wall);
+        WallState sn = get_wall_state(WALLS[south_cell.r][south_cell.c].north, left_wall);
+        WALLS[CURRENT_CELL.r][CURRENT_CELL.c].south = sn;
+        WALLS[south_cell.r][south_cell.c].north = sn;
         break;
+    }
     default:
         // Ignore any other directions
         break;

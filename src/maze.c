@@ -34,19 +34,18 @@ void init_walls() {
             WALLS[r][c].west = WALL_UNSEEN;
         }
     }
-    for (int r = 0; r < MAZE_SIZE; r++) {
-        WALLS[r][0].west = WALL_PRESENT;
-        WALLS[r][MAZE_SIZE - 1].east = WALL_PRESENT;
-    }
-    for (int c = 0; c < MAZE_SIZE; c++) {
-        WALLS[0][c].south = WALL_PRESENT;
-        WALLS[MAZE_SIZE - 1][c].north = WALL_PRESENT;
+    for (int i = 0; i < MAZE_SIZE; i++) {
+        WALLS[MAZE_SIZE - 1][i].north = WALL_PRESENT;
+        WALLS[i][MAZE_SIZE - 1].east = WALL_PRESENT;
+        WALLS[0][i].south = WALL_PRESENT;
+        WALLS[i][0].west = WALL_PRESENT;
     }
 
-    WALLS[0][0].north = WALL_ABSENT;
-    WALLS[0][0].east = WALL_PRESENT;
-    WALLS[0][0].west = WALL_PRESENT;
-    WALLS[0][0].south = WALL_PRESENT;
+    // Not true for all mazes
+    // WALLS[0][0].north = WALL_ABSENT;
+    // WALLS[0][0].east = WALL_PRESENT;
+    // WALLS[0][0].west = WALL_PRESENT;
+    // WALLS[0][0].south = WALL_PRESENT;
 }
 
 bool is_cell_accessible(CELL cell, ABSOLUTE_DIRECTION direction) {

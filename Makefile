@@ -1,3 +1,8 @@
+# ------------------------------------------------------ #
+  `justfile` is used for `arduino` developemnt purposes
+  `Makefile` is used for `local`   developemnt purposes
+# ------------------------------------------------------ #
+
 # config
 COMPILER=gcc
 VERSION=c17

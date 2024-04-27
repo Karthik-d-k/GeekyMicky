@@ -1,4 +1,5 @@
 #include <stdio.h>
+#include <stdlib.h>
 
 #include "floodfill.h"
 #include "maze.h"
@@ -15,5 +16,5 @@ int main(void) {
     printf("\n");
     test_floodfill();
 
-    return 0;
+    return EXIT_SUCCESS;
 }

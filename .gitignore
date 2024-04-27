@@ -54,3 +54,6 @@ dkms.conf
 
 # Ignore build artifacts
 build/
+
+# Ignore .vscode
+.vscode/

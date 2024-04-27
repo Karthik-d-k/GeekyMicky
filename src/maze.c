@@ -27,7 +27,7 @@ inline ABSOLUTE_DIRECTION behind_from(const ABSOLUTE_DIRECTION direction) {
     return (ABSOLUTE_DIRECTION)((direction + 2) % ABS_DIR_COUNT);
 }
 
-void init_walls() {
+void init_walls(void) {
     for (int r = 0; r < MAZE_SIZE; r++) {
         for (int c = 0; c < MAZE_SIZE; c++) {
             WALLS[r][c].north = WALL_UNSEEN;
@@ -366,7 +366,7 @@ void print_maze(uint8_t cost[MAZE_SIZE][MAZE_SIZE]) {
     printf("+\n");
 }
 
-void init_maze() {
+void init_maze(void) {
     init_walls();
     set_mask(MASK_TREAT_UNSEEN_AS_ABSENT);
 }

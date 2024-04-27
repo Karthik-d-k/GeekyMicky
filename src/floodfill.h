@@ -5,6 +5,6 @@
 
 void floodfill(const CELL target);
 
-int test_floodfill();
+int test_floodfill(void);
 
 #endif

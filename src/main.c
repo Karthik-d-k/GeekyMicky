@@ -4,11 +4,11 @@
 #include "maze.h"
 #include "queue.h"
 
-void init() {
+void init(void) {
     init_maze();
 }
 
-int main() {
+int main(void) {
     init();
 
     test_queue();

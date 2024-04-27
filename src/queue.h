@@ -23,6 +23,6 @@ void queue_push_rear(QUEUE* queue, CELL item);
 
 CELL queue_pop_front(QUEUE* queue);
 
-int test_queue();
+int test_queue(void);
 
 #endif

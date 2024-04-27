@@ -61,7 +61,7 @@ ABSOLUTE_DIRECTION ahead_from(const ABSOLUTE_DIRECTION heading);
 
 ABSOLUTE_DIRECTION behind_from(const ABSOLUTE_DIRECTION heading);
 
-void init_walls();
+void init_walls(void);
 
 bool is_cell_accessible(CELL cell, ABSOLUTE_DIRECTION direction);
 
@@ -85,6 +85,6 @@ void run_to(CELL target);
 
 void print_maze(uint8_t cost[MAZE_SIZE][MAZE_SIZE]);
 
-void init_maze();
+void init_maze(void);
 
 #endif

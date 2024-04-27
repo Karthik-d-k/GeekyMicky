@@ -29,7 +29,7 @@ CELL queue_pop_front(QUEUE* queue) {
 }
 
 // -------------------TEST / USAGE ------------------------- //
-int test_queue() {
+int test_queue(void) {
     QUEUE queue;
     queue_init(&queue);
 

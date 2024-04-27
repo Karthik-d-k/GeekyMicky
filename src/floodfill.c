@@ -42,7 +42,7 @@ void floodfill(const CELL target) {
 }
 
 // -------------------TEST / USAGE ------------------------- //
-int test_floodfill() {
+int test_floodfill(void) {
     CELL goal = {7, 7};
     floodfill(goal);
     print_maze(COST);

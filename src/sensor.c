@@ -14,6 +14,12 @@ IRInfo get_ir_sensor_values(uint8_t pin) {
     return ir_info;
 }
 
+bool is_wall_present(uint8_t pin, uint8_t threshold) {
+    IRInfo ir_info = get_ir_sensor_values(pin);
+
+    return (ir_info.distance < threshold);
+}
+
 // -------------------TEST / USAGE ------------------------- //
 int test_ir_sensors(void) {
     IRInfo front_ir = get_ir_sensor_values(FRONT_IR_PIN);

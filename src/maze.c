@@ -4,6 +4,7 @@
 
 #include "floodfill.h"
 #include "maze.h"
+#include "sensor.h"
 
 WallInfo WALLS[MAZE_SIZE][MAZE_SIZE];
 MazeMask MAZE_MASK = MASK_UNSEEN_WALLS_AS_ABSENT;
@@ -174,6 +175,7 @@ WallState get_wall_state(WallState current_state, WallState new_state) {
     }
     return current_state; // Return current state if not unseen
 }
+
 void update_walls(WallState front_wall, WallState right_wall, WallState left_wall) {
     CELL north_cell = neighbour_cell(CURRENT_CELL, NORTH);
     CELL east_cell = neighbour_cell(CURRENT_CELL, EAST);
@@ -268,9 +270,9 @@ void turn_to_face(ABSOLUTE_DIRECTION new_direction) {
 
 void seach_to(CELL target) {
     while ((CURRENT_CELL.r != target.r) || (CURRENT_CELL.c != target.c)) {
-        WallState front_wall = WALL_ABSENT; // API_wallFront() ? WALL_PRESENT : WALL_ABSENT;
-        WallState right_wall = WALL_ABSENT; // API_wallRight() ? WALL_PRESENT : WALL_ABSENT;
-        WallState left_wall = WALL_ABSENT;  // API_wallLeft() ? WALL_PRESENT : WALL_ABSENT;
+        WallState front_wall = is_wall_present(FRONT_IR_PIN, FRONT_WALL_THRESHOLD) ? WALL_PRESENT : WALL_ABSENT;
+        WallState right_wall = is_wall_present(RIGHT_IR_PIN, RIGHT_WALL_THRESHOLD) ? WALL_PRESENT : WALL_ABSENT;
+        WallState left_wall  = is_wall_present(LEFT_IR_PIN, LEFT_WALL_THRESHOLD) ? WALL_PRESENT : WALL_ABSENT;
 
         update_walls(front_wall, right_wall, left_wall);
         floodfill(target);

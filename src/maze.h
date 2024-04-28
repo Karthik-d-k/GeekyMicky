@@ -9,6 +9,11 @@
 #define MAZE_CELL_COUNT (MAZE_SIZE * MAZE_SIZE)
 #define MAX_COST (MAZE_CELL_COUNT - 1)
 
+// WALL PRESENCE THRESHOLDS (in cms)
+#define FRONT_WALL_THRESHOLD 15
+#define RIGHT_WALL_THRESHOLD 20
+#define LEFT_WALL_THRESHOLD 20
+
 #define START \
     { 0, 0 }
 #define END \

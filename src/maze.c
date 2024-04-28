@@ -6,24 +6,24 @@
 #include "maze.h"
 
 WallInfo WALLS[MAZE_SIZE][MAZE_SIZE];
-MazeMask MAZE_MASK = MASK_TREAT_UNSEEN_AS_ABSENT;
+MazeMask MAZE_MASK = MASK_UNSEEN_WALLS_AS_ABSENT;
 CELL CURRENT_CELL = {0, 0};
 ABSOLUTE_DIRECTION CURRENT_ABSOLUTE_DIRECTION = NORTH;
 extern uint8_t COST[MAZE_SIZE][MAZE_SIZE];
 
-inline ABSOLUTE_DIRECTION right_from(const ABSOLUTE_DIRECTION direction) {
+inline ABSOLUTE_DIRECTION right_from(ABSOLUTE_DIRECTION direction) {
     return (ABSOLUTE_DIRECTION)((direction + 1) % ABS_DIR_COUNT);
 }
 
-inline ABSOLUTE_DIRECTION left_from(const ABSOLUTE_DIRECTION direction) {
+inline ABSOLUTE_DIRECTION left_from(ABSOLUTE_DIRECTION direction) {
     return (ABSOLUTE_DIRECTION)((direction + ABS_DIR_COUNT - 1) % ABS_DIR_COUNT);
 }
 
-inline ABSOLUTE_DIRECTION ahead_from(const ABSOLUTE_DIRECTION direction) {
+inline ABSOLUTE_DIRECTION ahead_from(ABSOLUTE_DIRECTION direction) {
     return direction;
 }
 
-inline ABSOLUTE_DIRECTION behind_from(const ABSOLUTE_DIRECTION direction) {
+inline ABSOLUTE_DIRECTION behind_from(ABSOLUTE_DIRECTION direction) {
     return (ABSOLUTE_DIRECTION)((direction + 2) % ABS_DIR_COUNT);
 }
 
@@ -114,7 +114,7 @@ CELL neighbour_cell(CELL cell, ABSOLUTE_DIRECTION direction) {
     }
 }
 
-uint8_t cost_neighbour_cell(const CELL cell, const ABSOLUTE_DIRECTION direction) {
+uint8_t cost_neighbour_cell(CELL cell, ABSOLUTE_DIRECTION direction) {
     if (!is_cell_accessible(cell, direction)) {
         return MAX_COST;
     }
@@ -123,7 +123,7 @@ uint8_t cost_neighbour_cell(const CELL cell, const ABSOLUTE_DIRECTION direction)
     return COST[next_cell.r][next_cell.c];
 }
 
-ABSOLUTE_DIRECTION smallest_neighbour_cell(const CELL cell, const ABSOLUTE_DIRECTION start_direction) {
+ABSOLUTE_DIRECTION smallest_neighbour_direction(CELL cell, ABSOLUTE_DIRECTION start_direction) {
     ABSOLUTE_DIRECTION next_direction = start_direction;
     ABSOLUTE_DIRECTION best_direction = BLOCKED;
     uint8_t best_cost = COST[cell.r][cell.c];
@@ -164,7 +164,7 @@ ABSOLUTE_DIRECTION smallest_neighbour_cell(const CELL cell, const ABSOLUTE_DIREC
     return best_direction;
 }
 
-void set_mask(const MazeMask mask) {
+void set_mask(MazeMask mask) {
     MAZE_MASK = mask;
 }
 
@@ -275,7 +275,7 @@ void seach_to(CELL target) {
         update_walls(front_wall, right_wall, left_wall);
         floodfill(target);
 
-        ABSOLUTE_DIRECTION new_direction = smallest_neighbour_cell(CURRENT_CELL, CURRENT_ABSOLUTE_DIRECTION);
+        ABSOLUTE_DIRECTION new_direction = smallest_neighbour_direction(CURRENT_CELL, CURRENT_ABSOLUTE_DIRECTION);
         RELATIVE_DIRECTION direction_change = (new_direction - CURRENT_ABSOLUTE_DIRECTION) & 0x3;
 
         switch (direction_change) {
@@ -307,11 +307,11 @@ void seach_to(CELL target) {
 }
 
 void run_to(CELL target) {
-    set_mask(MASK_TREAT_UNSEEN_AS_PRESENT);
+    set_mask(MASK_UNSEEN_WALLS_AS_PRESENT);
     floodfill(target);
 
     while ((CURRENT_CELL.r != target.r) || (CURRENT_CELL.c != target.c)) {
-        ABSOLUTE_DIRECTION new_direction = smallest_neighbour_cell(CURRENT_CELL, CURRENT_ABSOLUTE_DIRECTION);
+        ABSOLUTE_DIRECTION new_direction = smallest_neighbour_direction(CURRENT_CELL, CURRENT_ABSOLUTE_DIRECTION);
         RELATIVE_DIRECTION direction_change = (new_direction - CURRENT_ABSOLUTE_DIRECTION) & 0x3;
 
         switch (direction_change) {
@@ -368,5 +368,5 @@ void print_maze(uint8_t cost[MAZE_SIZE][MAZE_SIZE]) {
 
 void init_maze(void) {
     init_walls();
-    set_mask(MASK_TREAT_UNSEEN_AS_ABSENT);
+    set_mask(MASK_UNSEEN_WALLS_AS_ABSENT);
 }

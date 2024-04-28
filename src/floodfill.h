@@ -3,7 +3,7 @@
 
 #include "maze.h"
 
-void floodfill(const CELL target);
+void floodfill(CELL target);
 
 int test_floodfill(void);
 

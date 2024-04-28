@@ -6,7 +6,7 @@
 
 uint8_t COST[MAZE_SIZE][MAZE_SIZE];
 
-void floodfill(const CELL target) {
+void floodfill(CELL target) {
     // 1. Set all cells cost to "blank state" (255)
     for (int r = 0; r < MAZE_SIZE; r++) {
         for (int c = 0; c < MAZE_SIZE; c++) {

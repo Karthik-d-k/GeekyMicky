@@ -49,17 +49,17 @@ typedef struct {
 } WallInfo;
 
 typedef enum {
-    MASK_TREAT_UNSEEN_AS_ABSENT = 0x01,  // treat unseen walls as absent during search
-    MASK_TREAT_UNSEEN_AS_PRESENT = 0x03, // treat unseen walls as present during speed run
+    MASK_UNSEEN_WALLS_AS_ABSENT = 0x01,  // treat unseen walls as absent during search
+    MASK_UNSEEN_WALLS_AS_PRESENT = 0x03, // treat unseen walls as present during speed run
 } MazeMask;
 
-ABSOLUTE_DIRECTION right_from(const ABSOLUTE_DIRECTION heading);
+ABSOLUTE_DIRECTION right_from(ABSOLUTE_DIRECTION heading);
 
-ABSOLUTE_DIRECTION left_from(const ABSOLUTE_DIRECTION heading);
+ABSOLUTE_DIRECTION left_from(ABSOLUTE_DIRECTION heading);
 
-ABSOLUTE_DIRECTION ahead_from(const ABSOLUTE_DIRECTION heading);
+ABSOLUTE_DIRECTION ahead_from(ABSOLUTE_DIRECTION heading);
 
-ABSOLUTE_DIRECTION behind_from(const ABSOLUTE_DIRECTION heading);
+ABSOLUTE_DIRECTION behind_from(ABSOLUTE_DIRECTION heading);
 
 void init_walls(void);
 
@@ -67,11 +67,11 @@ bool is_cell_accessible(CELL cell, ABSOLUTE_DIRECTION direction);
 
 CELL neighbour_cell(CELL cell, ABSOLUTE_DIRECTION direction);
 
-uint8_t cost_neighbour_cell(const CELL cell, const ABSOLUTE_DIRECTION direction);
+uint8_t cost_neighbour_cell(CELL cell, ABSOLUTE_DIRECTION direction);
 
-ABSOLUTE_DIRECTION smallest_neighbour_cell(const CELL cell, const ABSOLUTE_DIRECTION start_direction);
+ABSOLUTE_DIRECTION smallest_neighbour_direction(CELL cell, ABSOLUTE_DIRECTION start_direction);
 
-void set_mask(const MazeMask mask);
+void set_mask(MazeMask mask);
 
 WallState get_wall_state(WallState current_state, WallState new_state);
 

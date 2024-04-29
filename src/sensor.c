@@ -1,4 +1,5 @@
 #include "sensor.h"
+#include <stdio.h>
 
 IRInfo get_ir_sensor_values(uint8_t pin) {
     // Read analog value from sensor

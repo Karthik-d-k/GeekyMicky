@@ -52,8 +52,7 @@ Module.symvers
 Mkfile.old
 dkms.conf
 
-# Ignore build artifacts
+# Ignore build/pio artifacts
 build/
-
-# Ignore .vscode
 .vscode/
+firmware*

@@ -11,7 +11,7 @@ void init_motors(void) {
     analogWrite(LEFT_MOTOR_PWM_PIN, 0);
 }
 
-void test_motors(int motor_pin) {
+void test_motors(uint8_t motor_pin) {
     // Increase motor speed from 0 to maximum gradually
     for (int speed = 0; speed <= 255; speed++) {
         analogWrite(motor_pin, speed); // Set the motor speed

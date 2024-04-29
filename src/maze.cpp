@@ -82,7 +82,7 @@ CELL neighbour_cell(CELL cell, ABSOLUTE_DIRECTION direction) {
         if (new_x >= MAZE_SIZE) {
             return cell;
         }
-        CELL neighbour_cell = {new_x, cell.c};
+        CELL neighbour_cell = {(uint8_t)new_x, cell.c};
         return neighbour_cell;
     }
     case EAST: {
@@ -90,7 +90,7 @@ CELL neighbour_cell(CELL cell, ABSOLUTE_DIRECTION direction) {
         if (new_y >= MAZE_SIZE) {
             return cell;
         }
-        CELL neighbour_cell = {cell.r, new_y};
+        CELL neighbour_cell = {cell.r, (uint8_t)new_y};
         return neighbour_cell;
     }
     case SOUTH: {
@@ -98,7 +98,7 @@ CELL neighbour_cell(CELL cell, ABSOLUTE_DIRECTION direction) {
         if (new_x < 0) {
             return cell;
         }
-        CELL neighbour_cell = {new_x, cell.c};
+        CELL neighbour_cell = {(uint8_t)new_x, cell.c};
         return neighbour_cell;
     }
     case WEST: {
@@ -106,7 +106,7 @@ CELL neighbour_cell(CELL cell, ABSOLUTE_DIRECTION direction) {
         if (new_y < 0) {
             return cell;
         }
-        CELL neighbour_cell = {cell.r, new_y};
+        CELL neighbour_cell = {cell.r, (uint8_t)new_y};
         return neighbour_cell;
     }
     default:
@@ -246,7 +246,7 @@ void update_walls(WallState front_wall, WallState right_wall, WallState left_wal
 }
 
 void turn_to_face(ABSOLUTE_DIRECTION new_direction) {
-    RELATIVE_DIRECTION direction_change = (new_direction + ABS_DIR_COUNT - CURRENT_ABSOLUTE_DIRECTION) % ABS_DIR_COUNT;
+    RELATIVE_DIRECTION direction_change = (RELATIVE_DIRECTION)((new_direction + ABS_DIR_COUNT - CURRENT_ABSOLUTE_DIRECTION) % REL_DIR_COUNT);
 
     switch (direction_change) {
     case AHEAD:
@@ -272,13 +272,13 @@ void seach_to(CELL target) {
     while ((CURRENT_CELL.r != target.r) || (CURRENT_CELL.c != target.c)) {
         WallState front_wall = is_wall_present(FRONT_IR_PIN, FRONT_WALL_THRESHOLD) ? WALL_PRESENT : WALL_ABSENT;
         WallState right_wall = is_wall_present(RIGHT_IR_PIN, RIGHT_WALL_THRESHOLD) ? WALL_PRESENT : WALL_ABSENT;
-        WallState left_wall  = is_wall_present(LEFT_IR_PIN, LEFT_WALL_THRESHOLD) ? WALL_PRESENT : WALL_ABSENT;
+        WallState left_wall = is_wall_present(LEFT_IR_PIN, LEFT_WALL_THRESHOLD) ? WALL_PRESENT : WALL_ABSENT;
 
         update_walls(front_wall, right_wall, left_wall);
         floodfill(target);
 
         ABSOLUTE_DIRECTION new_direction = smallest_neighbour_direction(CURRENT_CELL, CURRENT_ABSOLUTE_DIRECTION);
-        RELATIVE_DIRECTION direction_change = (new_direction - CURRENT_ABSOLUTE_DIRECTION) & 0x3;
+        RELATIVE_DIRECTION direction_change = (RELATIVE_DIRECTION)((new_direction - CURRENT_ABSOLUTE_DIRECTION) & 0x3);
 
         switch (direction_change) {
         case AHEAD:
@@ -314,7 +314,7 @@ void run_to(CELL target) {
 
     while ((CURRENT_CELL.r != target.r) || (CURRENT_CELL.c != target.c)) {
         ABSOLUTE_DIRECTION new_direction = smallest_neighbour_direction(CURRENT_CELL, CURRENT_ABSOLUTE_DIRECTION);
-        RELATIVE_DIRECTION direction_change = (new_direction - CURRENT_ABSOLUTE_DIRECTION) & 0x3;
+        RELATIVE_DIRECTION direction_change = (RELATIVE_DIRECTION)((new_direction - CURRENT_ABSOLUTE_DIRECTION) & 0x3);
 
         switch (direction_change) {
         case AHEAD:

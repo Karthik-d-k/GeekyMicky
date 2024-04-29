@@ -8,6 +8,6 @@
 #define LEFT_MOTOR_PWM_PIN A7
 
 void init_motors(void);
-void test_motors(int motor_pin);
+void test_motors(uint8_t motor_pin);
 
 #endif

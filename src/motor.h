@@ -4,6 +4,7 @@
 #include <Arduino.h>
 
 // Motor pins (PWM pins are denoted by `~` sign on pinout diagram)
+// Analog pins are referred w/ `Ax` but digital pins are referred w/ numbers
 const uint8_t RIGHT_MOTOR_PWM_PIN = 11;
 const uint8_t LEFT_MOTOR_PWM_PIN = 10;
 

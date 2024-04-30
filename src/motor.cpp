@@ -3,9 +3,10 @@
 #include "motor.h"
 
 void init_motors(void) {
-    // Initialize the motor pin as an output
-    pinMode(RIGHT_MOTOR_PWM_PIN, OUTPUT);
-    pinMode(LEFT_MOTOR_PWM_PIN, OUTPUT);
+    // Initialize the motor pin as an output (not required as per docs)
+    // pinMode(RIGHT_MOTOR_PWM_PIN, OUTPUT);
+    // pinMode(LEFT_MOTOR_PWM_PIN, OUTPUT);
+
     // Set the initial motor speed to 0 (stopped)
     analogWrite(RIGHT_MOTOR_PWM_PIN, 0);
     analogWrite(LEFT_MOTOR_PWM_PIN, 0);

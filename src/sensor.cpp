@@ -3,6 +3,7 @@
 #include "sensor.h"
 #include <stdio.h>
 
+// ref: https://github.com/guillaume-rico/SharpIR
 IRInfo get_ir_sensor_values(uint8_t pin) {
     // Read analog value from sensor
     uint16_t adc_value = analogRead(pin);
@@ -11,7 +12,7 @@ IRInfo get_ir_sensor_values(uint8_t pin) {
     adc_value = constrain(adc_value, 0, 1023);
 
     // Calculate distance from power fit function
-    uint8_t distance = (uint8_t)(POWER_COEFF_C * pow(adc_value, POWER_COEFF_P));
+    uint8_t distance = (uint8_t)(POWER_COEFF_C * pow(map(adc_value, 0, 1023, 0, VCC) / 1000.0, POWER_COEFF_P));
 
     IRInfo ir_info = {adc_value, distance};
     return ir_info;

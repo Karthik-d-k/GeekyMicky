@@ -7,15 +7,15 @@
 #define FRONT_IR_PIN A0
 #define RIGHT_IR_PIN A1
 #define LEFT_IR_PIN A2
-#define POWER_COEFF_C 116483.399834958
-#define POWER_COEFF_P -1.132373887917551
+#define VCC 5000 // mv
+#define POWER_COEFF_C 29.988
+#define POWER_COEFF_P -1.173
 
 typedef struct {
     uint16_t adc_value;
     uint8_t distance;
-}IRInfo;
+} IRInfo;
 
-// ref: https://github.com/DrGFreeman/SharpDistSensor
 IRInfo get_ir_sensor_values(uint8_t pin);
 
 bool is_wall_present(uint8_t pin, uint8_t threshold);

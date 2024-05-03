@@ -30,8 +30,8 @@ void loop() {
 
     delay(1000);
     Serial.println("RUNNING MOTORS");
-    test_motors(RIGHT_MOTOR_PWM_PIN);
-    test_motors(LEFT_MOTOR_PWM_PIN);
+    test_right_motors();
+    test_left_motors();
     Serial.println("STOPPING MOTORS");
 
     delay(100);

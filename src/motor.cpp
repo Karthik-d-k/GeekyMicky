@@ -1,6 +1,6 @@
 #include <Arduino.h>
 
-#include <motor.h>
+#include "motor.h"
 #include <Wire.h>
 #include <MPU6050.h>
 

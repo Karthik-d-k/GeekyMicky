@@ -2,100 +2,43 @@
 
 #include "motor.h"
 
-L293D RIGHT_MOTOR;
-L293D LEFT_MOTOR;
+MOTOR RIGHT_MOTOR;
+MOTOR LEFT_MOTOR;
 
-void L293D_init(L293D* l293d_ptr, int pin_E, int pin_A, int pin_B) {
-    pinMode(pin_E, OUTPUT);
+void motor_init(MOTOR* motor_ptr, int pin_A, int pin_B) {
     pinMode(pin_A, OUTPUT);
     pinMode(pin_B, OUTPUT);
-    l293d_ptr->pin_E = pin_E;
-    l293d_ptr->pin_A = pin_A;
-    l293d_ptr->pin_B = pin_B;
-    // Set initially to 0
-    L293D_set_int(l293d_ptr, 0);
+    motor_ptr->pin_A = pin_A;
+    motor_ptr->pin_B = pin_B;
+    motor_ptr->speed = 0;
 }
 
-void L293D_set(L293D* l293d_ptr, double value) {
-    if (value <= 1 && value >= -1) {
-        L293D_set_int(l293d_ptr, (int)(value * 255));
-    }
+void motor_set_forward(MOTOR* motor_ptr, int speed) {
+    analogWrite(motor_ptr->pin_A, speed);
+    analogWrite(motor_ptr->pin_B, 0);
+    motor_ptr->speed = speed;
 }
 
-void L293D_set_int(L293D* l293d_ptr, int value) {
-    if (value == 0) {
-        digitalWrite(l293d_ptr->pin_E, LOW);
-        l293d_ptr->speed = value;
-    } else if (value > 0 && value <= 255) {
-        // disable before possibly switching directions
-        digitalWrite(l293d_ptr->pin_E, LOW);
-        // drive pin A HIGH and pin B LOW
-        digitalWrite(l293d_ptr->pin_A, HIGH);
-        digitalWrite(l293d_ptr->pin_B, LOW);
-        // enable
-        analogWrite(l293d_ptr->pin_E, value);
-        // Save value it's been set to
-        l293d_ptr->speed = value;
-    } else if (value < 0 && value >= -255) {
-        // disable before possibly switching directions
-        digitalWrite(l293d_ptr->pin_E, LOW);
-        // drive pin A LOW and pin B HIGH
-        digitalWrite(l293d_ptr->pin_A, LOW);
-        digitalWrite(l293d_ptr->pin_B, HIGH);
-        // enable
-        analogWrite(l293d_ptr->pin_E, -1 * value); // Multiply by -1 to make sure the value is positive.
-        // Save value it's been set to
-        l293d_ptr->speed = value;
-    }
+void motor_set_backward(MOTOR* motor_ptr, int speed) {
+    analogWrite(motor_ptr->pin_A, 0);
+    analogWrite(motor_ptr->pin_B, speed);
+    motor_ptr->speed = speed;
 }
 
-int L293D_get(L293D* l293d_ptr) {
-    return l293d_ptr->speed;
+int motor_get_speed(MOTOR* motor_ptr) {
+    return motor_ptr->speed;
 }
 
 void init_motors(void) {
-    L293D_init(&RIGHT_MOTOR, RIGHT_MOTOR_PWM_PIN, RIGHT_MOTOR_PIN1, RIGHT_MOTOR_PIN2);
-    L293D_init(&LEFT_MOTOR, LEFT_MOTOR_PWM_PIN, LEFT_MOTOR_PIN1, LEFT_MOTOR_PIN2);
+    motor_init(&RIGHT_MOTOR, RIGHT_MOTOR_PIN1, RIGHT_MOTOR_PIN2);
+    motor_init(&LEFT_MOTOR, LEFT_MOTOR_PIN1, LEFT_MOTOR_PIN2);
 }
 
-void test_right_motors(void) {
-    // Set motor speed and direction with a double value between -1 and 1
-    L293D_set(&RIGHT_MOTOR, 0.75); // 75% power forward
-    delay(2500);
-    L293D_set(&RIGHT_MOTOR, -0.3); // 30% power reverse
-    delay(2500);
-
-    // Set motor speed and direction with an int value between -255 and 255
-    L293D_set_int(&RIGHT_MOTOR, 200);
-    delay(2500);
-    L293D_set_int(&RIGHT_MOTOR, -150);
-    delay(2500);
-
-    // Use L293D_get() to get current speed and then update it from that
-    L293D_set_int(&RIGHT_MOTOR, -255);
-    while (L293D_get(&RIGHT_MOTOR) != 255) {
-        L293D_set_int(&RIGHT_MOTOR, L293D_get(&RIGHT_MOTOR) + 5); // Increment motor speed from previous speed
-        delay(100);                                               // Delay 100ms to see the speed changing
-    }
-}
-
-void test_left_motors(void) {
-    // Set motor speed and direction with a double value between -1 and 1
-    L293D_set(&LEFT_MOTOR, 0.75); // 75% power forward
-    delay(2500);
-    L293D_set(&LEFT_MOTOR, -0.3); // 30% power reverse
-    delay(2500);
-
-    // Set motor speed and direction with an int value between -255 and 255
-    L293D_set_int(&LEFT_MOTOR, 200);
-    delay(2500);
-    L293D_set_int(&LEFT_MOTOR, -150);
-    delay(2500);
-
-    // Use L293D_get() to get current speed and then update it from that
-    L293D_set_int(&LEFT_MOTOR, -255);
-    while (L293D_get(&LEFT_MOTOR) != 255) {
-        L293D_set_int(&LEFT_MOTOR, L293D_get(&LEFT_MOTOR) + 5); // Increment motor speed from previous speed
-        delay(100);                                             // Delay 100ms to see the speed changing
-    }
+void test_motors(int speed) {
+    motor_set_forward(&RIGHT_MOTOR, speed);
+    motor_set_forward(&LEFT_MOTOR, speed);
+    delay(2000);
+    motor_set_backward(&RIGHT_MOTOR, speed);
+    motor_set_backward(&LEFT_MOTOR, speed);
+    delay(2000);
 }

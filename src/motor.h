@@ -3,37 +3,32 @@
 
 #include <Arduino.h>
 
-// ref: https://github.com/tylersweat/arduino-L293D
+// ref: https://github.com/tylersweat/arduino-MOTOR
 
 // Motor pins (PWM pins are denoted by `~` sign on pinout diagram)
 // Analog pins are referred w/ `Ax` but digital pins are referred w/ numbers
-const uint8_t RIGHT_MOTOR_PIN1 = 7;
-const uint8_t RIGHT_MOTOR_PIN2 = 8;
-const uint8_t RIGHT_MOTOR_PWM_PIN = 9;
+const int RIGHT_MOTOR_PIN1 = 11;
+const int RIGHT_MOTOR_PIN2 = 10;
 
-const uint8_t LEFT_MOTOR_PIN1 = 2;
-const uint8_t LEFT_MOTOR_PIN2 = 4;
-const uint8_t LEFT_MOTOR_PWM_PIN = 3;
+const int LEFT_MOTOR_PIN1 = 6;
+const int LEFT_MOTOR_PIN2 = 5;
 
 typedef struct {
-    int pin_E;
     int pin_A;
     int pin_B;
     int speed;
-} L293D;
+} MOTOR;
 
-void L293D_init(L293D* l293d_ptr, int pin_E, int pin_A, int pin_B);
+void motor_init(MOTOR* motor_ptr, int pin_A, int pin_B);
 
-void L293D_set(L293D* l293d_ptr, double speed);
+void motor_set_forward(MOTOR* motor_ptr, int speed);
 
-void L293D_set_int(L293D* l293d_ptr, int speed);
+void motor_set_backward(MOTOR* motor_ptr, int speed);
 
-int L293D_get(L293D* l293d_ptr);
+int motor_get_speed(MOTOR* motor_ptr);
 
 void init_motors(void);
 
-void test_right_motors(void);
-
-void test_left_motors(void);
+void test_motors(int speed);
 
 #endif

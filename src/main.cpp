@@ -18,8 +18,7 @@ void setup() {
 void loop() {
     delay(1000);
     Serial.println("RUNNING MOTORS");
-    test_right_motors();
-    test_left_motors();
+    test_motors(255);
     Serial.println("STOPPING MOTORS");
 
     delay(1000);

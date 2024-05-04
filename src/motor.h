@@ -2,6 +2,8 @@
 #define MOTOR_H
 
 #include <Arduino.h>
+#include <Wire.h>
+#include <MPU6050.h>
 
 // ref: https://github.com/tylersweat/arduino-L293D
 
@@ -22,7 +24,17 @@ typedef struct {
     int speed;
 } L293D;
 
-void L293D_init(L293D* l293d_ptr, int pin_E, int pin_A, int pin_B);
+type struct
+{
+    float speedX;
+    float speedY;
+    float speedZ;
+    float rotSpeed;
+} MPU6050_Gyr;
+
+extern MPU6050_Gyr GYROSCOPE_OUT;
+
+void L293D_init(L293D *l293d_ptr, int pin_E, int pin_A, int pin_B);
 
 void L293D_set(L293D* l293d_ptr, double speed);
 

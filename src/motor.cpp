@@ -1,9 +1,44 @@
 #include <Arduino.h>
 
-#include "motor.h"
+#include <motor.h>
+#include <Wire.h>
+#include <MPU6050.h>
+
+MPU6050 gyroscope;
 
 L293D RIGHT_MOTOR;
 L293D LEFT_MOTOR;
+
+#define getAccX gyroscope.getAccelerationX()
+#define getAccY gyroscope.getAccelerationY()
+#define getAccZ gyroscope.getAccelerationZ()
+#define getRotX gyroscope.getRotationX()
+
+unsigned long prevTime = 0;
+float speedX = 0, speedY = 0, speedZ = 0, rotSpeed = 0;
+
+void init_Gyroscope()
+{
+    gyroscope.initialize();
+}
+
+void calculateSpeedAndRotation()
+{
+
+    unsigned long currentTime = millis();
+    float rate = (currentTime - previousTime) / 1000.0;
+    previousTime = currentTime;
+
+    speedX += getAccX * rate;
+    speedY += getAccY * rate;
+    speedZ += getAccZ * rate;
+    rotSpeed = getRotX * (180.0 / 3.14);
+    GYROSCOPE_OUT.speedX = speedX;
+    GYROSCOPE_OUT.speedY = speedY;
+    GYROSCOPE_OUT.speedZ = speedZ;
+    GYROSCOPE_OUT.rotSpeed = rotSpeed;
+    delay(10);
+}
 
 void L293D_init(L293D* l293d_ptr, int pin_E, int pin_A, int pin_B) {
     pinMode(pin_E, OUTPUT);
@@ -56,6 +91,7 @@ int L293D_get(L293D* l293d_ptr) {
 void init_motors(void) {
     L293D_init(&RIGHT_MOTOR, RIGHT_MOTOR_PWM_PIN, RIGHT_MOTOR_PIN1, RIGHT_MOTOR_PIN2);
     L293D_init(&LEFT_MOTOR, LEFT_MOTOR_PWM_PIN, LEFT_MOTOR_PIN1, LEFT_MOTOR_PIN2);
+    init_Gyroscope();
 }
 
 void test_right_motors(void) {

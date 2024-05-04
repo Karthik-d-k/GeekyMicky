@@ -270,9 +270,9 @@ void turn_to_face(ABSOLUTE_DIRECTION new_direction) {
 
 void seach_to(CELL target) {
     while ((CURRENT_CELL.r != target.r) || (CURRENT_CELL.c != target.c)) {
-        WallState front_wall = is_wall_present(FRONT_IR_PIN, FRONT_WALL_THRESHOLD) ? WALL_PRESENT : WALL_ABSENT;
-        WallState right_wall = is_wall_present(RIGHT_IR_PIN, RIGHT_WALL_THRESHOLD) ? WALL_PRESENT : WALL_ABSENT;
-        WallState left_wall = is_wall_present(LEFT_IR_PIN, LEFT_WALL_THRESHOLD) ? WALL_PRESENT : WALL_ABSENT;
+        WallState front_wall = is_wall_present(FRONT_US_TRIG, FRONT_US_ECHO, FRONT_WALL_THRESHOLD) ? WALL_PRESENT : WALL_ABSENT;
+        WallState right_wall = is_wall_present(RIGHT_US_TRIG, RIGHT_US_ECHO, RIGHT_WALL_THRESHOLD) ? WALL_PRESENT : WALL_ABSENT;
+        WallState left_wall = is_wall_present(LEFT_US_TRIG, LEFT_US_ECHO, LEFT_WALL_THRESHOLD) ? WALL_PRESENT : WALL_ABSENT;
 
         update_walls(front_wall, right_wall, left_wall);
         floodfill(target);

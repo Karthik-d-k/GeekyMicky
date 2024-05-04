@@ -84,7 +84,7 @@ void update_walls(WallState front_wall, WallState right_wall, WallState left_wal
 
 void turn_to_face(ABSOLUTE_DIRECTION new_direction);
 
-void seach_to(CELL target);
+void search_to(CELL target);
 
 void run_to(CELL target);
 

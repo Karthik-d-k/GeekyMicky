@@ -11,7 +11,7 @@ const int RIGHT_US_ECHO = 17;
 const int LEFT_US_TRIG = 18;
 const int LEFT_US_ECHO = 19;
 
-void init_ultrasonic(int us_trig_pin, int us_echo_pin);
+void init_ultrasonic(void);
 
 float get_ultrasonic_dist(int us_trig_pin, int us_echo_pin);
 

@@ -4,6 +4,7 @@
 
 #include "floodfill.h"
 #include "maze.h"
+#include "motor.h"
 #include "sensor.h"
 
 WallInfo WALLS[MAZE_SIZE][MAZE_SIZE];
@@ -11,6 +12,8 @@ MazeMask MAZE_MASK = MASK_UNSEEN_WALLS_AS_ABSENT;
 CELL CURRENT_CELL = {0, 0};
 ABSOLUTE_DIRECTION CURRENT_ABSOLUTE_DIRECTION = NORTH;
 extern uint8_t COST[MAZE_SIZE][MAZE_SIZE];
+extern MOTOR RIGHT_MOTOR;
+extern MOTOR LEFT_MOTOR;
 
 inline ABSOLUTE_DIRECTION right_from(ABSOLUTE_DIRECTION direction) {
     return (ABSOLUTE_DIRECTION)((direction + 1) % ABS_DIR_COUNT);
@@ -268,7 +271,7 @@ void turn_to_face(ABSOLUTE_DIRECTION new_direction) {
     CURRENT_ABSOLUTE_DIRECTION = new_direction;
 }
 
-void seach_to(CELL target) {
+void search_to(CELL target) {
     while ((CURRENT_CELL.r != target.r) || (CURRENT_CELL.c != target.c)) {
         WallState front_wall = is_wall_present(FRONT_US_TRIG, FRONT_US_ECHO, FRONT_WALL_THRESHOLD) ? WALL_PRESENT : WALL_ABSENT;
         WallState right_wall = is_wall_present(RIGHT_US_TRIG, RIGHT_US_ECHO, RIGHT_WALL_THRESHOLD) ? WALL_PRESENT : WALL_ABSENT;
@@ -282,20 +285,20 @@ void seach_to(CELL target) {
 
         switch (direction_change) {
         case AHEAD:
-            // API_moveForward();
+            motor_set_forward(&RIGHT_MOTOR, 255);
             break;
         case RIGHT:
             // API_turnRight();
-            // API_moveForward();
+            motor_set_forward(&RIGHT_MOTOR, 255);
             break;
         case BACK:
             // API_turnRight();
             // API_turnRight();
-            // API_moveForward();
+            motor_set_forward(&RIGHT_MOTOR, 255);
             break;
         case LEFT:
             // API_turnLeft();
-            // API_moveForward();
+            motor_set_forward(&RIGHT_MOTOR, 255);
             break;
         default:
             // Ignore any other directions
@@ -318,20 +321,20 @@ void run_to(CELL target) {
 
         switch (direction_change) {
         case AHEAD:
-            // API_moveForward();
+            motor_set_forward(&RIGHT_MOTOR, 255);
             break;
         case RIGHT:
             // API_turnRight();
-            // API_moveForward();
+            motor_set_forward(&RIGHT_MOTOR, 255);
             break;
         case BACK:
             // API_turnRight();
             // API_turnRight();
-            // API_moveForward();
+            motor_set_forward(&RIGHT_MOTOR, 255);
             break;
         case LEFT:
             // API_turnLeft();
-            // API_moveForward();
+            motor_set_forward(&RIGHT_MOTOR, 255);
             break;
         default:
             // Ignore any other directions

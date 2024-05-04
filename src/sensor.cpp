@@ -3,9 +3,13 @@
 #include "sensor.h"
 #include <stdio.h>
 
-void init_ultrasonic(int us_trig_pin, int us_echo_pin) {
-    pinMode(us_trig_pin, OUTPUT);
-    pinMode(us_echo_pin, INPUT);
+void init_ultrasonic(void) {
+    pinMode(FRONT_US_TRIG, OUTPUT);
+    pinMode(FRONT_US_ECHO, INPUT);
+    pinMode(RIGHT_US_TRIG, OUTPUT);
+    pinMode(RIGHT_US_ECHO, INPUT);
+    pinMode(LEFT_US_TRIG, OUTPUT);
+    pinMode(LEFT_US_ECHO, INPUT);
 }
 
 // ref: https://github.com/gamegine/HCSR04-ultrasonic-sensor-lib

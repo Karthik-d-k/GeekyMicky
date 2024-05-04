@@ -11,12 +11,24 @@
 #define POWER_COEFF_C 29.988
 #define POWER_COEFF_P -1.173
 
+// Ultrasonic pins
+const int FRONT_US_TRIG = 5;
+const int FRONT_US_ECHO = 6;
+const int RIGHT_US_TRIG = 11;
+const int RIGHT_US_ECHO = 12;
+const int LEFT_US_TRIG = 19;
+const int LEFT_US_ECHO = 18;
+
 typedef struct {
     uint16_t adc_value;
     uint8_t distance;
 } IRInfo;
 
 IRInfo get_ir_sensor_values(uint8_t pin);
+
+void init_ultrasonic(int us_trig_pin, int us_echo_pin);
+
+float get_ultrasonic_dist(int us_trig_pin, int us_echo_pin);
 
 bool is_wall_present(uint8_t pin, uint8_t threshold);
 

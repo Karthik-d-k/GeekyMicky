@@ -7,11 +7,11 @@
 
 // Motor pins (PWM pins are denoted by `~` sign on pinout diagram)
 // Analog pins are referred w/ `Ax` but digital pins are referred w/ numbers
-const int RIGHT_MOTOR_PIN1 = 11;
-const int RIGHT_MOTOR_PIN2 = 10;
+const uint8_t RIGHT_MOTOR_PIN1 = 11;
+const uint8_t RIGHT_MOTOR_PIN2 = 10;
 
-const int LEFT_MOTOR_PIN1 = 6;
-const int LEFT_MOTOR_PIN2 = 5;
+const uint8_t LEFT_MOTOR_PIN1 = 6;
+const uint8_t LEFT_MOTOR_PIN2 = 5;
 
 typedef struct {
     int pin_A;

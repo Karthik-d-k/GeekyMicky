@@ -4,12 +4,12 @@
 #include <Arduino.h>
 
 // Ultrasonic pins
-const int FRONT_US_TRIG = 14;
-const int FRONT_US_ECHO = 15;
-const int RIGHT_US_TRIG = 16;
-const int RIGHT_US_ECHO = 17;
-const int LEFT_US_TRIG = 18;
-const int LEFT_US_ECHO = 19;
+const uint8_t FRONT_US_TRIG = 14;
+const uint8_t FRONT_US_ECHO = 15;
+const uint8_t RIGHT_US_TRIG = 16;
+const uint8_t RIGHT_US_ECHO = 17;
+const uint8_t LEFT_US_TRIG = 18;
+const uint8_t LEFT_US_ECHO = 19;
 
 void init_ultrasonic(void);
 

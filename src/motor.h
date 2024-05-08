@@ -19,6 +19,8 @@ typedef struct {
     int speed;
 } MOTOR;
 
+void set_pwm_frequency(void);
+
 void motor_init(MOTOR* motor_ptr, int pin_A, int pin_B);
 
 void motor_set_forward(MOTOR* motor_ptr, int speed);
@@ -28,6 +30,8 @@ void motor_set_backward(MOTOR* motor_ptr, int speed);
 int motor_get_speed(MOTOR* motor_ptr);
 
 void init_motors(void);
+
+void stop_motors(void);
 
 void test_motors(int speed);
 

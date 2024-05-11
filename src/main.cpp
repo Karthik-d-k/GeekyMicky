@@ -3,7 +3,7 @@
 #include "config.h"
 #include "floodfill.h"
 #include "maze.h"
-#include "motor.h"
+#include "motors.h"
 #include "queue.h"
 #include "sensor.h"
 #include "systick.h"
@@ -26,7 +26,7 @@ void setup() {
     pinMode(ENABLE_PIN, INPUT);
 
     init_maze();
-    init_motors();
+    // init_motors();
     init_ultrasonic();
     /// do not begin systick until the hardware is setup
     systick_begin();

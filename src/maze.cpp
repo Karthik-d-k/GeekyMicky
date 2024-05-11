@@ -4,7 +4,7 @@
 
 #include "floodfill.h"
 #include "maze.h"
-#include "motor.h"
+#include "motors.h"
 #include "sensor.h"
 
 WallInfo WALLS[MAZE_SIZE][MAZE_SIZE];
@@ -12,8 +12,6 @@ MazeMask MAZE_MASK = MASK_UNSEEN_WALLS_AS_ABSENT;
 CELL CURRENT_CELL = {0, 0};
 ABSOLUTE_DIRECTION CURRENT_ABSOLUTE_DIRECTION = NORTH;
 extern uint8_t COST[MAZE_SIZE][MAZE_SIZE];
-extern MOTOR RIGHT_MOTOR;
-extern MOTOR LEFT_MOTOR;
 
 inline ABSOLUTE_DIRECTION right_from(ABSOLUTE_DIRECTION direction) {
     return (ABSOLUTE_DIRECTION)((direction + 1) % ABS_DIR_COUNT);
@@ -285,20 +283,20 @@ void search_to(CELL target) {
 
         switch (direction_change) {
         case AHEAD:
-            motor_set_forward(&RIGHT_MOTOR, 255);
+            // motor_set_forward(&RIGHT_MOTOR, 255);
             break;
         case RIGHT:
             // API_turnRight();
-            motor_set_forward(&RIGHT_MOTOR, 255);
+            // motor_set_forward(&RIGHT_MOTOR, 255);
             break;
         case BACK:
             // API_turnRight();
             // API_turnRight();
-            motor_set_forward(&RIGHT_MOTOR, 255);
+            // motor_set_forward(&RIGHT_MOTOR, 255);
             break;
         case LEFT:
             // API_turnLeft();
-            motor_set_forward(&RIGHT_MOTOR, 255);
+            // motor_set_forward(&RIGHT_MOTOR, 255);
             break;
         default:
             // Ignore any other directions
@@ -321,20 +319,20 @@ void run_to(CELL target) {
 
         switch (direction_change) {
         case AHEAD:
-            motor_set_forward(&RIGHT_MOTOR, 255);
+            // motor_set_forward(&RIGHT_MOTOR, 255);
             break;
         case RIGHT:
             // API_turnRight();
-            motor_set_forward(&RIGHT_MOTOR, 255);
+            // motor_set_forward(&RIGHT_MOTOR, 255);
             break;
         case BACK:
             // API_turnRight();
             // API_turnRight();
-            motor_set_forward(&RIGHT_MOTOR, 255);
+            // motor_set_forward(&RIGHT_MOTOR, 255);
             break;
         case LEFT:
             // API_turnLeft();
-            motor_set_forward(&RIGHT_MOTOR, 255);
+            // motor_set_forward(&RIGHT_MOTOR, 255);
             break;
         default:
             // Ignore any other directions

@@ -14,6 +14,7 @@ const uint8_t LEFT_MOTOR_PIN2 = 5;
 const uint8_t LEFT_MOTOR_PWM = 11;
 
 const uint8_t MOTOR_STANDBY = 7;
+const int FORWARD_MOTOR_SPEED = 100;
 
 typedef struct {
     int pin_A;

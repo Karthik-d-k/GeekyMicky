@@ -7,6 +7,19 @@
 extern ABSOLUTE_DIRECTION CURRENT_ABSOLUTE_DIRECTION;
 extern CELL CURRENT_CELL;
 
+void move(void) {
+    float front_dist = get_ultrasonic_dist(FRONT_US_TRIG, FRONT_US_ECHO);
+    float target_dist = front_dist - CELL_LENGTH + FRONT_DIST_OFFSET;
+
+    if (target_dist > 0.0) {
+        forward_motors(FORWARD_MOTOR_SPEED);
+        while (get_ultrasonic_dist(FRONT_US_TRIG, FRONT_US_ECHO) <= target_dist) {
+            continue;
+        }
+        stop_motors();
+    }
+}
+
 void turn_to_face(ABSOLUTE_DIRECTION new_direction) {
     RELATIVE_DIRECTION direction_change = (RELATIVE_DIRECTION)((new_direction + ABS_DIR_COUNT - CURRENT_ABSOLUTE_DIRECTION) % REL_DIR_COUNT);
 
@@ -44,19 +57,18 @@ void search_to(CELL target) {
 
         switch (direction_change) {
         case AHEAD:
-            // API_moveAhead();
+            move();
             break;
         case RIGHT:
             // turn_to_face(RIGHT);
-            // API_moveAhead();
+            move();
             break;
         case BACK:
             // turn_to_face(BACK);
-            // API_moveAhead();
             break;
         case LEFT:
             // turn_to_face(LEFT);
-            // API_moveAhead();
+            move();
             break;
         default:
             // Ignore any other directions

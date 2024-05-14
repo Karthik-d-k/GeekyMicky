@@ -82,12 +82,6 @@ WallState get_wall_state(WallState current_state, WallState new_state);
 
 void update_walls(WallState front_wall, WallState right_wall, WallState left_wall);
 
-void turn_to_face(ABSOLUTE_DIRECTION new_direction);
-
-void search_to(CELL target);
-
-void run_to(CELL target);
-
 void print_maze(uint8_t cost[MAZE_SIZE][MAZE_SIZE]);
 
 void init_maze(void);

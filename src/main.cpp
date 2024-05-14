@@ -4,6 +4,7 @@
 #include "floodfill.h"
 #include "maze.h"
 #include "motor.h"
+#include "mouse.h"
 #include "queue.h"
 #include "sensor.h"
 #include "systick.h"

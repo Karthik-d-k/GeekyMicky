@@ -98,14 +98,15 @@ void search_to(CELL target) {
             move();
             break;
         case RIGHT:
-            // turn_to_face(RIGHT);
+            turn_right();
             move();
             break;
         case BACK:
-            // turn_to_face(BACK);
+            turn_right();
+            turn_right();
             break;
         case LEFT:
-            // turn_to_face(LEFT);
+            turn_left();
             move();
             break;
         default:
@@ -129,20 +130,19 @@ void run_to(CELL target) {
 
         switch (direction_change) {
         case AHEAD:
-            // API_moveAhead();
+            move();
             break;
         case RIGHT:
-            // API_turnRight();
-            // API_moveAhead();
+            turn_right();
+            move();
             break;
         case BACK:
-            // API_turnRight();
-            // API_turnRight();
-            // API_moveAhead();
+            turn_right();
+            turn_right();
             break;
         case LEFT:
-            // API_turnLeft();
-            // API_moveAhead();
+            turn_left();
+            move();
             break;
         default:
             // Ignore any other directions

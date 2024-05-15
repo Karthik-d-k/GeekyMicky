@@ -9,7 +9,7 @@ extern CELL CURRENT_CELL;
 
 void move(void) {
     float front_dist = get_ultrasonic_dist(FRONT_US_TRIG, FRONT_US_ECHO);
-    float target_dist = front_dist - CELL_LENGTH + FRONT_DIST_OFFSET;
+    float target_dist = front_dist - CELL_LENGTH + FORWARD_DIST_OFFSET;
 
     if (target_dist > 0.0) {
         forward_motors(FORWARD_MOTOR_SPEED);
@@ -18,6 +18,44 @@ void move(void) {
         }
         stop_motors();
     }
+}
+
+bool right_turn_completed(float front_dist_prev, float right_dist_prev) {
+    float front_dist_now = get_ultrasonic_dist(FRONT_US_TRIG, FRONT_US_ECHO);
+    float left_dist_now = get_ultrasonic_dist(LEFT_US_TRIG, LEFT_US_ECHO);
+
+    return (front_dist_now >= right_dist_prev) && (left_dist_now >= front_dist_prev);
+}
+
+bool left_turn_completed(float front_dist_prev, float left_dist_prev) {
+    float front_dist_now = get_ultrasonic_dist(FRONT_US_TRIG, FRONT_US_ECHO);
+    float right_dist_now = get_ultrasonic_dist(RIGHT_US_TRIG, RIGHT_US_ECHO);
+
+    return (front_dist_now >= left_dist_prev) && (right_dist_now >= front_dist_prev);
+}
+
+void turn_right(void) {
+    float front_dist = get_ultrasonic_dist(FRONT_US_TRIG, FRONT_US_ECHO) + TURNING_DIST_OFFSET;
+    float right_dist = get_ultrasonic_dist(RIGHT_US_TRIG, RIGHT_US_ECHO) + TURNING_DIST_OFFSET;
+
+    right_motors(TURNING_MOTOR_SPEED);
+    delay(TURNING_DELAY); // delay before checking for turning complete, so that motors turn a little
+    while (!right_turn_completed(front_dist, right_dist)) {
+        continue;
+    }
+    stop_motors();
+}
+
+void turn_left(void) {
+    float front_dist = get_ultrasonic_dist(FRONT_US_TRIG, FRONT_US_ECHO) + TURNING_DIST_OFFSET;
+    float left_dist = get_ultrasonic_dist(LEFT_US_TRIG, LEFT_US_ECHO) + TURNING_DIST_OFFSET;
+
+    right_motors(TURNING_MOTOR_SPEED);
+    delay(TURNING_DELAY); // delay before checking for turning complete, so that motors turn a little
+    while (!left_turn_completed(front_dist, left_dist)) {
+        continue;
+    }
+    stop_motors();
 }
 
 void turn_to_face(ABSOLUTE_DIRECTION new_direction) {

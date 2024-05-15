@@ -6,9 +6,19 @@
 // Mouse constants
 #define CELL_LENGTH 18.0
 #define MOUSE_LENGTH 11.0
-#define FRONT_DIST_OFFSET 1.0 // To calibrate if ultrasonic is not precise
+#define FORWARD_DIST_OFFSET 0.0 // To calibrate if ultrasonic is not precise
+#define TURNING_DIST_OFFSET 0.0 // To calibrate if ultrasonic is not precise
+#define TURNING_DELAY 10        // Delay before checking for turning completeness
 
 void move(void);
+
+bool right_turn_completed(float front_dist_prev, float right_dist_prev);
+
+bool left_turn_completed(float front_dist_prev, float left_dist_prev);
+
+void turn_right(void);
+
+void turn_left(void);
 
 void turn_to_face(ABSOLUTE_DIRECTION new_direction);
 

@@ -52,9 +52,37 @@ void forward_motors(int speed) {
 
 void backward_motors(int speed) {
     // IN1 IN2 PWM STBY
-    //  L   H   H   H    STOP
+    //  L   H   H   H    CCW
     fast_write_pin(RIGHT_MOTOR_PIN1, LOW);
     fast_write_pin(RIGHT_MOTOR_PIN2, HIGH);
+    fast_write_pin(LEFT_MOTOR_PIN1, LOW);
+    fast_write_pin(LEFT_MOTOR_PIN2, HIGH);
+
+    analogWrite(RIGHT_MOTOR_PWM, speed);
+    analogWrite(LEFT_MOTOR_PWM, speed);
+}
+
+void right_motors(int speed) {
+    // IN1 IN2 PWM STBY
+    //  L   H   H   H    CCW (RIGHT)
+    // IN1 IN2 PWM STBY
+    //  H   L   H   H    CW (LEFT)
+    fast_write_pin(RIGHT_MOTOR_PIN1, LOW);
+    fast_write_pin(RIGHT_MOTOR_PIN2, HIGH);
+    fast_write_pin(LEFT_MOTOR_PIN1, HIGH);
+    fast_write_pin(LEFT_MOTOR_PIN2, LOW);
+
+    analogWrite(RIGHT_MOTOR_PWM, speed);
+    analogWrite(LEFT_MOTOR_PWM, speed);
+}
+
+void left_motors(int speed) {
+    // IN1 IN2 PWM STBY
+    //  H   L   H   H    CW (RIGHT)
+    // IN1 IN2 PWM STBY
+    //  L   H   H   H    CCW (LEFT)
+    fast_write_pin(RIGHT_MOTOR_PIN1, HIGH);
+    fast_write_pin(RIGHT_MOTOR_PIN2, LOW);
     fast_write_pin(LEFT_MOTOR_PIN1, LOW);
     fast_write_pin(LEFT_MOTOR_PIN2, HIGH);
 
@@ -81,6 +109,11 @@ void test_motors(int speed) {
     delay(5000);
     shortbrake_motors();
     forward_motors(speed);
+    delay(5000);
+    stop_motors();
+    right_motors(speed);
+    delay(5000);
+    left_motors(speed);
     delay(5000);
     stop_motors();
 }

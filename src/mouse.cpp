@@ -81,7 +81,11 @@ void turn_to_face(ABSOLUTE_DIRECTION new_direction) {
         turn_left();
         move();
         break;
+    default:
+        // Ignore any other directions
+        break;
     }
+
     CURRENT_ABSOLUTE_DIRECTION = new_direction;
 }
 

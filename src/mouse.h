@@ -9,6 +9,7 @@
 #define FORWARD_DIST_OFFSET 0.0 // To calibrate if ultrasonic is not precise
 #define TURNING_DIST_OFFSET 0.0 // To calibrate if ultrasonic is not precise
 #define TURNING_DELAY 10        // Delay before checking for turning completeness
+#define DELTA_TURN_COMPLETE 0.1 // Delta b/w ultrasonic sensors for complete turn
 
 void move(void);
 

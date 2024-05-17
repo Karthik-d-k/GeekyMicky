@@ -23,15 +23,19 @@ void move(void) {
 bool right_turn_completed(float front_dist_prev, float right_dist_prev) {
     float front_dist_now = get_ultrasonic_dist(FRONT_US_TRIG, FRONT_US_ECHO);
     float left_dist_now = get_ultrasonic_dist(LEFT_US_TRIG, LEFT_US_ECHO);
+    bool right1 = (fabs(front_dist_now - right_dist_prev) <= DELTA_TURN_COMPLETE);
+    bool right2 = (fabs(left_dist_now - front_dist_prev) <= DELTA_TURN_COMPLETE);
 
-    return (front_dist_now >= right_dist_prev) && (left_dist_now >= front_dist_prev);
+    return right1 && right2;
 }
 
 bool left_turn_completed(float front_dist_prev, float left_dist_prev) {
     float front_dist_now = get_ultrasonic_dist(FRONT_US_TRIG, FRONT_US_ECHO);
     float right_dist_now = get_ultrasonic_dist(RIGHT_US_TRIG, RIGHT_US_ECHO);
+    bool left1 = (fabs(front_dist_now - left_dist_prev) <= DELTA_TURN_COMPLETE);
+    bool left2 = (fabs(right_dist_now - front_dist_prev) <= DELTA_TURN_COMPLETE);
 
-    return (front_dist_now >= left_dist_prev) && (right_dist_now >= front_dist_prev);
+    return left1 && left2;
 }
 
 void turn_right(void) {
@@ -65,17 +69,16 @@ void turn_to_face(ABSOLUTE_DIRECTION new_direction) {
     case AHEAD:
         break;
     case RIGHT:
-        // API_turnRight();
+        turn_right();
+        move();
         break;
     case BACK:
-        // API_turnRight();
-        // API_turnRight();
+        turn_right();
+        turn_right();
         break;
     case LEFT:
-        // API_turnLeft();
-        break;
-    default:
-        // Ignore any other directions
+        turn_left();
+        move();
         break;
     }
     CURRENT_ABSOLUTE_DIRECTION = new_direction;

@@ -10,42 +10,40 @@ extern CELL CURRENT_CELL;
 void move(void) {
     float front_dist = get_ultrasonic_dist(FRONT_US_TRIG, FRONT_US_ECHO);
     float target_dist = front_dist - CELL_LENGTH + FORWARD_DIST_OFFSET;
+    unsigned long start_time = millis();
 
     if (target_dist > 0.0) {
         forward_motors(FORWARD_MOTOR_SPEED);
-        while (get_ultrasonic_dist(FRONT_US_TRIG, FRONT_US_ECHO) <= target_dist) {
-            continue;
+        while (get_ultrasonic_dist(FRONT_US_TRIG, FRONT_US_ECHO) > target_dist) {
+            if (millis() - start_time > MOVEMENT_TIMEOUT) {
+                break; // Timeout to avoid infinite loop
+            }
         }
         stop_motors();
     }
 }
 
-bool right_turn_completed(float front_dist_prev, float right_dist_prev) {
+bool turn_completed(float front_dist_prev, float side_dist_prev, bool is_right_turn) {
     float front_dist_now = get_ultrasonic_dist(FRONT_US_TRIG, FRONT_US_ECHO);
-    float left_dist_now = get_ultrasonic_dist(LEFT_US_TRIG, LEFT_US_ECHO);
-    bool right1 = (fabs(front_dist_now - right_dist_prev) <= DELTA_TURN_COMPLETE);
-    bool right2 = (fabs(left_dist_now - front_dist_prev) <= DELTA_TURN_COMPLETE);
+    float side_dist_now = is_right_turn ? get_ultrasonic_dist(LEFT_US_TRIG, LEFT_US_ECHO) : get_ultrasonic_dist(RIGHT_US_TRIG, RIGHT_US_ECHO);
+    bool cond1 = (fabs(front_dist_now - side_dist_prev) <= DELTA_TURN_COMPLETE);
+    bool cond2 = (fabs(side_dist_now - front_dist_prev) <= DELTA_TURN_COMPLETE);
 
-    return right1 && right2;
-}
-
-bool left_turn_completed(float front_dist_prev, float left_dist_prev) {
-    float front_dist_now = get_ultrasonic_dist(FRONT_US_TRIG, FRONT_US_ECHO);
-    float right_dist_now = get_ultrasonic_dist(RIGHT_US_TRIG, RIGHT_US_ECHO);
-    bool left1 = (fabs(front_dist_now - left_dist_prev) <= DELTA_TURN_COMPLETE);
-    bool left2 = (fabs(right_dist_now - front_dist_prev) <= DELTA_TURN_COMPLETE);
-
-    return left1 && left2;
+    return cond1 && cond2;
 }
 
 void turn_right(void) {
     float front_dist = get_ultrasonic_dist(FRONT_US_TRIG, FRONT_US_ECHO) + TURNING_DIST_OFFSET;
     float right_dist = get_ultrasonic_dist(RIGHT_US_TRIG, RIGHT_US_ECHO) + TURNING_DIST_OFFSET;
+    unsigned long start_time = millis();
 
     right_motors(TURNING_MOTOR_SPEED);
     delay(TURNING_DELAY); // delay before checking for turning complete, so that motors turn a little
-    while (!right_turn_completed(front_dist, right_dist)) {
-        continue;
+
+    while (!turn_completed(front_dist, right_dist, true)) {
+        if (millis() - start_time > MOVEMENT_TIMEOUT) {
+            break; // Timeout to avoid infinite loop
+        }
     }
     stop_motors();
 }
@@ -53,11 +51,14 @@ void turn_right(void) {
 void turn_left(void) {
     float front_dist = get_ultrasonic_dist(FRONT_US_TRIG, FRONT_US_ECHO) + TURNING_DIST_OFFSET;
     float left_dist = get_ultrasonic_dist(LEFT_US_TRIG, LEFT_US_ECHO) + TURNING_DIST_OFFSET;
+    unsigned long start_time = millis();
 
-    right_motors(TURNING_MOTOR_SPEED);
+    left_motors(TURNING_MOTOR_SPEED);
     delay(TURNING_DELAY); // delay before checking for turning complete, so that motors turn a little
-    while (!left_turn_completed(front_dist, left_dist)) {
-        continue;
+    while (!turn_completed(front_dist, left_dist, false)) {
+        if (millis() - start_time > MOVEMENT_TIMEOUT) {
+            break; // Timeout to avoid infinite loop
+        }
     }
     stop_motors();
 }

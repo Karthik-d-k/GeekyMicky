@@ -122,9 +122,9 @@ void stop_motors(void) {
 void forward_motors(int speed) {
     // IN1 IN2 OU1 OU2
     //  H   L   H   L    CW
-    fast_write_pin(RIGHT_MOTOR_PIN1, speed);
+    analogWrite(RIGHT_MOTOR_PIN1, speed);
     fast_write_pin(RIGHT_MOTOR_PIN2, LOW);
-    fast_write_pin(LEFT_MOTOR_PIN1, speed);
+    analogWrite(LEFT_MOTOR_PIN1, speed);
     fast_write_pin(LEFT_MOTOR_PIN2, LOW);
 }
 
@@ -132,9 +132,9 @@ void backward_motors(int speed) {
     // IN1 IN2 OU1 OU2
     //  L   H   L   H    CCW
     fast_write_pin(RIGHT_MOTOR_PIN1, LOW);
-    fast_write_pin(RIGHT_MOTOR_PIN2, speed);
+    analogWrite(RIGHT_MOTOR_PIN2, speed);
     fast_write_pin(LEFT_MOTOR_PIN1, LOW);
-    fast_write_pin(LEFT_MOTOR_PIN2, speed);
+    analogWrite(LEFT_MOTOR_PIN2, speed);
 }
 
 void right_motors(int speed) {
@@ -143,8 +143,8 @@ void right_motors(int speed) {
     // IN1 IN2 OU1 OU2
     //  H   L   H   L    CW (LEFT)
     fast_write_pin(RIGHT_MOTOR_PIN1, LOW);
-    fast_write_pin(RIGHT_MOTOR_PIN2, speed);
-    fast_write_pin(LEFT_MOTOR_PIN1, speed);
+    analogWrite(RIGHT_MOTOR_PIN2, speed);
+    analogWrite(LEFT_MOTOR_PIN1, speed);
     fast_write_pin(LEFT_MOTOR_PIN2, LOW);
 }
 
@@ -153,10 +153,10 @@ void left_motors(int speed) {
     //  H   L   H   L    CW (RIGHT)
     // IN1 IN2 OU1 OU2
     //  L   H   L   H    CCW (LEFT)
-    fast_write_pin(RIGHT_MOTOR_PIN1, speed);
+    analogWrite(RIGHT_MOTOR_PIN1, speed);
     fast_write_pin(RIGHT_MOTOR_PIN2, LOW);
     fast_write_pin(LEFT_MOTOR_PIN1, LOW);
-    fast_write_pin(LEFT_MOTOR_PIN2, speed);
+    analogWrite(LEFT_MOTOR_PIN2, speed);
 }
 
 void shortbrake_motors(void) {

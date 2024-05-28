@@ -3,6 +3,37 @@
 
 #include <Arduino.h>
 
+/*******************************************************************************
+                         CALIBRATION PARAMETERS
+ ******************************************************************************/
+
+// WALL PRESENCE THRESHOLDS (in cms)
+#define FRONT_WALL_THRESHOLD 15.0
+#define RIGHT_WALL_THRESHOLD 20.0
+#define LEFT_WALL_THRESHOLD 20.0
+
+// Start and End cell location
+#define START \
+    { 0, 0 }
+#define END \
+    { 15, 15 }
+
+// these constants are used to allow you to make your motor configuration
+// line up with function names like forward.  Value can be 1 or -1
+const int RIGHT_MOTOR_OFFSET = 1;
+const int LEFT_MOTOR_OFFSET = 1;
+
+// Mouse constants
+#define CELL_LENGTH 18.0
+#define MOUSE_LENGTH 11.0
+#define FORWARD_DIST_OFFSET 0.0 // To calibrate if ultrasonic is not precise
+#define TURNING_DIST_OFFSET 0.0 // To calibrate if ultrasonic is not precise
+#define TURNING_DELAY 10        // Delay before checking for turning completeness
+#define DELTA_TURN_COMPLETE 0.1 // Delta b/w ultrasonic sensors for complete turn
+#define MOVEMENT_TIMEOUT 5000   // Delay in ms to avoid infinite movement/turnings bcz of sensor errors
+
+/******************************************************************************/
+
 const uint32_t BAUDRATE = 115200;
 
 /******************************************************************************

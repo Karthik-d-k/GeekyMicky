@@ -1,6 +1,7 @@
 #ifndef MOTOR_H
 #define MOTOR_H
 
+#include "config.h"
 #include <Arduino.h>
 
 #define TB6612FNG_ENABLE true
@@ -22,11 +23,6 @@ const uint8_t LEFT_MOTOR_PIN2 = 5;
 const uint8_t LEFT_MOTOR_PWM = 11;
 
 const uint8_t MOTOR_STANDBY = 7;
-
-// these constants are used to allow you to make your motor configuration
-// line up with function names like forward.  Value can be 1 or -1
-const int RIGHT_MOTOR_OFFSET = 1;
-const int LEFT_MOTOR_OFFSET = 1;
 
 #elif L9110_ENABLE
 const uint8_t RIGHT_MOTOR_PIN1 = 3;

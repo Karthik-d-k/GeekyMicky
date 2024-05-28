@@ -1,6 +1,7 @@
 #ifndef MAZE_H
 #define MAZE_H
 
+#include "config.h"
 #include <stdbool.h>
 #include <stdint.h>
 
@@ -8,16 +9,6 @@
 #define MAZE_SIZE 16
 #define MAZE_CELL_COUNT (MAZE_SIZE * MAZE_SIZE)
 #define MAX_COST (MAZE_CELL_COUNT - 1)
-
-// WALL PRESENCE THRESHOLDS (in cms)
-#define FRONT_WALL_THRESHOLD 15.0
-#define RIGHT_WALL_THRESHOLD 20.0
-#define LEFT_WALL_THRESHOLD 20.0
-
-#define START \
-    { 0, 0 }
-#define END \
-    { 15, 15 }
 
 typedef struct {
     uint8_t r;

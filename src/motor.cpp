@@ -1,103 +1,44 @@
 #include <Arduino.h>
 
+#include "SparkFun_TB6612.h"
 #include "config.h"
 #include "motor.h"
 
-void set_pwm_frequency(void) {
-    // Divide by 1. frequency = 31.25 kHz;
-    bitClear(TCCR1B, CS11);
-    bitSet(TCCR1B, CS10);
-}
-
 #if TB6612FNG_ENABLE
-void init_motors(void) {
-    set_pwm_frequency();
-    pinMode(RIGHT_MOTOR_PIN1, OUTPUT);
-    pinMode(RIGHT_MOTOR_PIN2, OUTPUT);
-    pinMode(LEFT_MOTOR_PIN1, OUTPUT);
-    pinMode(LEFT_MOTOR_PIN2, OUTPUT);
-    pinMode(RIGHT_MOTOR_PWM, OUTPUT);
-    pinMode(LEFT_MOTOR_PWM, OUTPUT);
-    pinMode(MOTOR_STANDBY, OUTPUT);
 
-    fast_write_pin(MOTOR_STANDBY, HIGH);
+// Initializing motors.  The library will allow you to initialize as many
+// motors as you have memory for.  If you are using functions like forward
+// that take 2 motors as arguements you can either write new functions or
+// call the function more than once.
+Motor RIGHT_MOTOR = Motor(RIGHT_MOTOR_PIN1, RIGHT_MOTOR_PIN2, RIGHT_MOTOR_PWM, RIGHT_MOTOR_OFFSET, MOTOR_STANDBY);
+Motor LEFT_MOTOR = Motor(LEFT_MOTOR_PIN1, LEFT_MOTOR_PIN2, LEFT_MOTOR_PWM, LEFT_MOTOR_OFFSET, MOTOR_STANDBY);
+
+void init_motors(void) {
     stop_motors();
 }
 
 void stop_motors(void) {
-    // IN1 IN2 PWM STBY
-    //  L   L   H   H    STOP
-    fast_write_pin(RIGHT_MOTOR_PIN1, LOW);
-    fast_write_pin(RIGHT_MOTOR_PIN2, LOW);
-    fast_write_pin(LEFT_MOTOR_PIN1, LOW);
-    fast_write_pin(LEFT_MOTOR_PIN2, LOW);
-
-    fast_write_pin(RIGHT_MOTOR_PWM, HIGH);
-    fast_write_pin(LEFT_MOTOR_PWM, HIGH);
+    brake(RIGHT_MOTOR, LEFT_MOTOR);
 }
 
 void forward_motors(int speed) {
-    // IN1 IN2 PWM STBY
-    //  H   L   H   H    CW
-    fast_write_pin(RIGHT_MOTOR_PIN1, HIGH);
-    fast_write_pin(RIGHT_MOTOR_PIN2, LOW);
-    fast_write_pin(LEFT_MOTOR_PIN1, HIGH);
-    fast_write_pin(LEFT_MOTOR_PIN2, LOW);
-
-    analogWrite(RIGHT_MOTOR_PWM, speed);
-    analogWrite(LEFT_MOTOR_PWM, speed);
+    forward(RIGHT_MOTOR, LEFT_MOTOR, speed);
 }
 
 void backward_motors(int speed) {
-    // IN1 IN2 PWM STBY
-    //  L   H   H   H    CCW
-    fast_write_pin(RIGHT_MOTOR_PIN1, LOW);
-    fast_write_pin(RIGHT_MOTOR_PIN2, HIGH);
-    fast_write_pin(LEFT_MOTOR_PIN1, LOW);
-    fast_write_pin(LEFT_MOTOR_PIN2, HIGH);
-
-    analogWrite(RIGHT_MOTOR_PWM, speed);
-    analogWrite(LEFT_MOTOR_PWM, speed);
+    back(RIGHT_MOTOR, LEFT_MOTOR, -speed);
 }
 
 void right_motors(int speed) {
-    // IN1 IN2 PWM STBY
-    //  L   H   H   H    CCW (RIGHT)
-    // IN1 IN2 PWM STBY
-    //  H   L   H   H    CW (LEFT)
-    fast_write_pin(RIGHT_MOTOR_PIN1, LOW);
-    fast_write_pin(RIGHT_MOTOR_PIN2, HIGH);
-    fast_write_pin(LEFT_MOTOR_PIN1, HIGH);
-    fast_write_pin(LEFT_MOTOR_PIN2, LOW);
-
-    analogWrite(RIGHT_MOTOR_PWM, speed);
-    analogWrite(LEFT_MOTOR_PWM, speed);
+    right(RIGHT_MOTOR, LEFT_MOTOR, speed);
 }
 
 void left_motors(int speed) {
-    // IN1 IN2 PWM STBY
-    //  H   L   H   H    CW (RIGHT)
-    // IN1 IN2 PWM STBY
-    //  L   H   H   H    CCW (LEFT)
-    fast_write_pin(RIGHT_MOTOR_PIN1, HIGH);
-    fast_write_pin(RIGHT_MOTOR_PIN2, LOW);
-    fast_write_pin(LEFT_MOTOR_PIN1, LOW);
-    fast_write_pin(LEFT_MOTOR_PIN2, HIGH);
-
-    analogWrite(RIGHT_MOTOR_PWM, speed);
-    analogWrite(LEFT_MOTOR_PWM, speed);
+    left(RIGHT_MOTOR, LEFT_MOTOR, speed);
 }
 
 void shortbrake_motors(void) {
-    // IN1 IN2 PWM STBY
-    //  H   L   L   H    STOP
-    fast_write_pin(RIGHT_MOTOR_PIN1, HIGH);
-    fast_write_pin(RIGHT_MOTOR_PIN2, LOW);
-    fast_write_pin(LEFT_MOTOR_PIN1, HIGH);
-    fast_write_pin(LEFT_MOTOR_PIN2, LOW);
-
-    fast_write_pin(RIGHT_MOTOR_PWM, LOW);
-    fast_write_pin(LEFT_MOTOR_PWM, LOW);
+    stop_motors();
 }
 
 #elif L9110_ENABLE

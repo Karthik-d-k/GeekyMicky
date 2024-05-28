@@ -10,6 +10,9 @@
 // Analog pins are referred w/ `Ax` but digital pins are referred w/ numbers
 
 #if TB6612FNG_ENABLE
+
+#include "SparkFun_TB6612.h"
+
 const uint8_t RIGHT_MOTOR_PIN1 = 2;
 const uint8_t RIGHT_MOTOR_PIN2 = 3;
 const uint8_t RIGHT_MOTOR_PWM = 10;
@@ -19,6 +22,11 @@ const uint8_t LEFT_MOTOR_PIN2 = 5;
 const uint8_t LEFT_MOTOR_PWM = 11;
 
 const uint8_t MOTOR_STANDBY = 7;
+
+// these constants are used to allow you to make your motor configuration
+// line up with function names like forward.  Value can be 1 or -1
+const int RIGHT_MOTOR_OFFSET = 1;
+const int LEFT_MOTOR_OFFSET = 1;
 
 #elif L9110_ENABLE
 const uint8_t RIGHT_MOTOR_PIN1 = 3;
@@ -30,8 +38,6 @@ const uint8_t LEFT_MOTOR_PIN2 = 11;
 
 const int FORWARD_MOTOR_SPEED = 100;
 const int TURNING_MOTOR_SPEED = 100;
-
-void set_pwm_frequency(void);
 
 void init_motors(void);
 

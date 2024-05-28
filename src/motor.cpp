@@ -41,6 +41,55 @@ void shortbrake_motors(void) {
     stop_motors();
 }
 
+void test_motors(int speed) {
+    // Use of the drive function which takes as arguements the speed
+    // and optional duration.  A negative speed will cause it to go
+    // backwards.  Speed can be from -255 to 255.  Also use of the
+    // brake function which takes no arguements.
+    RIGHT_MOTOR.drive(255, 1000);
+    RIGHT_MOTOR.drive(-255, 1000);
+    RIGHT_MOTOR.brake();
+    delay(1000);
+
+    // Use of the drive function which takes as arguements the speed
+    // and optional duration.  A negative speed will cause it to go
+    // backwards.  Speed can be from -255 to 255.  Also use of the
+    // brake function which takes no arguements.
+    LEFT_MOTOR.drive(255, 1000);
+    LEFT_MOTOR.drive(-255, 1000);
+    LEFT_MOTOR.brake();
+    delay(1000);
+
+    // Use of the forward function, which takes as arguements two motors
+    // and optionally a speed.  If a negative number is used for speed
+    // it will go backwards
+    forward(RIGHT_MOTOR, LEFT_MOTOR, 150);
+    delay(1000);
+
+    // Use of the back function, which takes as arguments two motors
+    // and optionally a speed.  Either a positive number or a negative
+    // number for speed will cause it to go backwards
+    back(RIGHT_MOTOR, LEFT_MOTOR, -150);
+    delay(1000);
+
+    // Use of the brake function which takes as arguments two motors.
+    // Note that functions do not stop motors on their own.
+    brake(RIGHT_MOTOR, LEFT_MOTOR);
+    delay(1000);
+
+    // Use of the left and right functions which take as arguements two
+    // motors and a speed.  This function turns both motors to move in
+    // the appropriate direction.  For turning a single motor use drive.
+    left(RIGHT_MOTOR, LEFT_MOTOR, 100);
+    delay(1000);
+    right(RIGHT_MOTOR, LEFT_MOTOR, 100);
+    delay(1000);
+
+    // Use of brake again.
+    brake(RIGHT_MOTOR, LEFT_MOTOR);
+    delay(1000);
+}
+
 #elif L9110_ENABLE
 void init_motors(void) {
     set_pwm_frequency();
@@ -110,8 +159,6 @@ void shortbrake_motors(void) {
     fast_write_pin(LEFT_MOTOR_PIN2, LOW);
 }
 
-#endif
-
 void test_motors(int speed) {
     forward_motors(speed);
     delay(5000);
@@ -127,3 +174,5 @@ void test_motors(int speed) {
     delay(5000);
     stop_motors();
 }
+
+#endif

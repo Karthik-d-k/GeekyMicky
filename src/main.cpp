@@ -9,7 +9,7 @@
 #include "sensor.h"
 #include "systick.h"
 
-const uint8_t ENABLE_PIN = 2; // Digital pin to enable the control loop
+const uint8_t ENABLE_PIN = 6; // Digital pin to enable the control loop
 volatile bool robot_enabled = false;
 
 extern CELL CURRENT_CELL;

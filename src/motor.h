@@ -3,7 +3,7 @@
 
 #include <Arduino.h>
 
-#define TB6612FNG_ENABLE false
+#define TB6612FNG_ENABLE true
 #define L9110_ENABLE !TB6612FNG_ENABLE
 
 // Motor pins (PWM pins are denoted by `~` sign on pinout diagram)
@@ -19,6 +19,7 @@ const uint8_t LEFT_MOTOR_PIN2 = 5;
 const uint8_t LEFT_MOTOR_PWM = 11;
 
 const uint8_t MOTOR_STANDBY = 7;
+
 #elif L9110_ENABLE
 const uint8_t RIGHT_MOTOR_PIN1 = 3;
 const uint8_t RIGHT_MOTOR_PIN2 = 10;

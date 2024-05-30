@@ -95,6 +95,14 @@ void search_to(CELL target) {
         WallState right_wall = is_wall_present(RIGHT_US_TRIG, RIGHT_US_ECHO, RIGHT_WALL_THRESHOLD) ? WALL_PRESENT : WALL_ABSENT;
         WallState left_wall = is_wall_present(LEFT_US_TRIG, LEFT_US_ECHO, LEFT_WALL_THRESHOLD) ? WALL_PRESENT : WALL_ABSENT;
 
+        Serial.println("front_wall right_wall left_wall");
+        Serial.print(front_wall);
+        Serial.print("\t");
+        Serial.print(right_wall);
+        Serial.print("\t");
+        Serial.print(left_wall);
+        Serial.print("\n\n");
+
         update_walls(front_wall, right_wall, left_wall);
         floodfill(target);
 
@@ -103,21 +111,26 @@ void search_to(CELL target) {
 
         switch (direction_change) {
         case AHEAD:
+            Serial.println("forward");
             move();
             break;
         case RIGHT:
+            Serial.println("right turn");
             turn_right();
             move();
             break;
         case BACK:
+            Serial.println("backward");
             turn_right();
             turn_right();
             break;
         case LEFT:
+            Serial.println("left turn");
             turn_left();
             move();
             break;
         default:
+            Serial.println("IMPOSSIBLE MOVE");
             // Ignore any other directions
             break;
         }

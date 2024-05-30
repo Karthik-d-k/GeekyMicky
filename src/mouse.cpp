@@ -71,7 +71,6 @@ void turn_to_face(ABSOLUTE_DIRECTION new_direction) {
         break;
     case RIGHT:
         turn_right();
-        move();
         break;
     case BACK:
         turn_right();
@@ -79,7 +78,6 @@ void turn_to_face(ABSOLUTE_DIRECTION new_direction) {
         break;
     case LEFT:
         turn_left();
-        move();
         break;
     default:
         // Ignore any other directions
@@ -117,7 +115,6 @@ void search_to(CELL target) {
         case RIGHT:
             Serial.println("right turn");
             turn_right();
-            move();
             break;
         case BACK:
             Serial.println("backward");
@@ -127,7 +124,6 @@ void search_to(CELL target) {
         case LEFT:
             Serial.println("left turn");
             turn_left();
-            move();
             break;
         default:
             Serial.println("IMPOSSIBLE MOVE");
@@ -155,7 +151,6 @@ void run_to(CELL target) {
             break;
         case RIGHT:
             turn_right();
-            move();
             break;
         case BACK:
             turn_right();
@@ -163,7 +158,6 @@ void run_to(CELL target) {
             break;
         case LEFT:
             turn_left();
-            move();
             break;
         default:
             // Ignore any other directions
